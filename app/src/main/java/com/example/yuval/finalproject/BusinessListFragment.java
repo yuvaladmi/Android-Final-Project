@@ -54,7 +54,7 @@ public class BusinessListFragment extends Fragment {
         getActivity().setTitle("Businesses List");
         View contentView = inflater.inflate(R.layout.fragment_business_list, container, false);
         list = (ListView) contentView.findViewById(R.id.stlist_list);
-        data = Model.instance.getAllBusinessUsers();
+        //data = Model.instance.getAllBusinessUsers();
         businessListAdapter = new BusinessListAdapter();
 
         list.setAdapter(businessListAdapter);
@@ -71,22 +71,23 @@ public class BusinessListFragment extends Fragment {
         Model.instance().getAllBusinessUsers(new Model.GetAllUsersListener() {
             @Override
             public void onComplete(BusinessUser user) {
-                songsAdapter.add(song);
+               // songsAdapter.add(song);
             }
 
             @Override
             public Context getAppContext() {
-                return MyAppContext.getAppContext();
+                return null;
+                //MyAppContext.getAppContext();
             }
 
             @Override
             public void showProgressBar() {
-                progressBar.showProgressDialog();
+               // progressBar.showProgressDialog();
             }
 
             @Override
             public void hideProgressBar() {
-                progressBar.hideProgressDialog();
+                //progressBar.hideProgressDialog();
             }
 
         });

@@ -12,30 +12,32 @@ import java.util.List;
 
 public class Model {
 
-    ModelFirebase modelFirebase=new ModelFirebase();
+    ModelFirebase modelFirebase = new ModelFirebase();
     private ModelMem modelMem;
     private ModelSQL modelSql;
 
     final public static Model instance = new Model();
-    public static Model instance(){
+
+    public static Model instance() {
         return instance;
     }
 
-    private Model(){
+    private Model() {
         modelMem = new ModelMem();
         modelSql = new ModelSQL(MyApplication.getMyContext());
         modelFirebase = new ModelFirebase();
     }
 
-    public List<BusinessUser> getAllBusinessUsers(Model.GetAllUsersListener listener){
+    public List<BusinessUser> getAllBusinessUsers(Model.GetAllUsersListener listener) {
 
-        if(BusinessUserSQL.getAllStudents(modelSql.getReadableDatabase()).size() == 0){
+        if (BusinessUserSQL.getAllStudents(modelSql.getReadableDatabase()).size() == 0) {
             Log.d("TAG", "sql null");
             return modelMem.getAllUsers();
         }
-        Log.d("TAG","sql not null");
+        Log.d("TAG", "sql not null");
         //return modelFirebase.getAllUsers(listener);
         //BusinessUserSQL.getAllStudents(modelSql.getReadableDatabase());
+        return null;
     }
 
     public boolean addNewBusinessUser(BusinessUser newUser){
