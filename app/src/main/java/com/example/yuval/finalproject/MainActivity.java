@@ -29,23 +29,22 @@ public class MainActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        progressBar=new MyProgressBar(this);
         //constracting the fragments in this activity
         mainFragment=new MainFragment();
         signInFragment=new SignInFragment();
         registerFragment=new RegisterFragment();
         businessListFragment = new BusinessListFragment();
-
         ftr = getFragmentManager().beginTransaction();
         //add to the screen
-        ftr.add(R.id.main_container,businessListFragment);
+        ftr.add(R.id.main_container,mainFragment);
 
         //show fragment
-        ftr.show(businessListFragment);
+        ftr.show(mainFragment);
         ftr.commit();
 
 
-/*
+
         loginListener= new Model.LoginListener() {
             @Override
             public void showProgressBar() {
@@ -108,6 +107,25 @@ public class MainActivity extends Activity
                 registerFragment.changeRegisterButtonText();
             }
 
+            @Override
+            public void goToMainActivity() {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void goToListFragment() {
+                ftr = getFragmentManager().beginTransaction();
+                //add to the screen
+                ftr.add(R.id.main_container,businessListFragment);
+
+                //show fragment
+                ftr.show(businessListFragment);
+                ftr.commit();
+            }
+
+
         };
         //if a user is already authenticated sign him.
         Model.instance().checkIfUserAuthonticated(loginListener);
@@ -141,7 +159,7 @@ public class MainActivity extends Activity
         registerFragment.setDelegate(new RegisterFragment.Delegate() {
 
             @Override
-            public void onRegisterButtonClick(ClientUser user) {
+            public void onRegisterButtonClick(BusinessUser user) {
                 if(registerFragment.getRegisterBtnTag().equals("1"))
                 {
                     Model.instance().addUser(user,loginListener);
@@ -155,8 +173,8 @@ public class MainActivity extends Activity
             }
 
             @Override
-            public void onVerifyEmailClick(ClientUser user) {
-
+            public void onVerifyEmailClick(BusinessUser user) {
+                Model.instance().verifyEmail(loginListener);
             }
 
         });
@@ -166,7 +184,7 @@ public class MainActivity extends Activity
             public void onSignInPressed(String email, String password) {
                 Model.instance().signIn(email,password,loginListener);
             }
-        });*/
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -7,25 +7,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TableLayout;
 
 import com.example.yuval.finalproject.Model.BusinessUser;
 import com.example.yuval.finalproject.Model.ClientUser;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RegisterFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link RegisterFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RegisterFragment extends Fragment {
     EditText fNameET;
     EditText lNameET;
     EditText emailET;
     EditText passwordET;
+
+    CheckBox isBus;
+    TableLayout tablebus;
+    Boolean flage=false;
 
     //buttons
     Button verifyEmailBtn;
@@ -36,8 +34,8 @@ public class RegisterFragment extends Fragment {
     }
 
     public interface Delegate{
-        void onRegisterButtonClick(ClientUser user);
-        void onVerifyEmailClick(ClientUser user);
+        void onRegisterButtonClick(BusinessUser user);
+        void onVerifyEmailClick(BusinessUser user);
     }
 
     Delegate delegate;
@@ -62,6 +60,27 @@ public class RegisterFragment extends Fragment {
         registerBtn=(Button)view.findViewById(R.id.fragment_register_btn);
 
         verifyEmailBtn.setEnabled(false);
+
+        isBus= (CheckBox)view.findViewById(R.id.fragment_register_isBusiness);
+        tablebus= (TableLayout) view.findViewById(R.id.fragment_register_table_bus);
+        tablebus.setVisibility(View.GONE);
+
+
+        isBus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flage=!flage;
+
+                if (flage){
+                    tablebus.setVisibility(View.VISIBLE);
+                }
+                else {
+                    tablebus.setVisibility(View.GONE);
+                }
+
+
+            }
+        });
 
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
@@ -91,10 +110,10 @@ public class RegisterFragment extends Fragment {
         return view;
     }
 
-    public ClientUser setUserDetails()
+    public BusinessUser setUserDetails()
     {
         BusinessUser user = new BusinessUser();
-        user.setName(lNameET.getText().toString());
+        user.setfName(lNameET.getText().toString());
         user.setEmail(emailET.getText().toString());
         user.setPassword(passwordET.getText().toString());
 

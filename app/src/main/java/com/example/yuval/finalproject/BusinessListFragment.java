@@ -137,7 +137,7 @@ public class BusinessListFragment extends Fragment {
             //cb.setTag(position);
 
             BusinessUser bUser = data.get(position);
-            name.setText(bUser.getName());
+            name.setText(bUser.getfName());
             id.setText(bUser.getUserId());
 
             return convertView;

@@ -85,7 +85,7 @@ public class BusinessEditFragment extends Fragment {
             }
         });*/
 
-        nameEt.setText(user.getName());
+        nameEt.setText(user.getfName());
         idEt.setText(user.getUserId());
         addreddEt.setText(user.getAddress());
         /*phoneEt.setText(user.getPhone());
@@ -106,7 +106,7 @@ public class BusinessEditFragment extends Fragment {
                 }else{
                     Log.d("TAG","save");
                     user.setUserId(idEt.getText().toString());
-                    user.setName(nameEt.getText().toString());
+                    user.setfName(nameEt.getText().toString());
                     user.setAddress(addreddEt.getText().toString());
                     /*user.setPhone(phoneEt.getText().toString());
                     user.setDate(datePicker);

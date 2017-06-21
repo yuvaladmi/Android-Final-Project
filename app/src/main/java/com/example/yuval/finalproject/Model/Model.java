@@ -3,7 +3,6 @@ package com.example.yuval.finalproject.Model;
 import android.app.Activity;
 import android.util.Log;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -125,19 +124,22 @@ public class Model {
          * if the registration worked,update the buttons(register button disabled and verify email enabled)
          */
         void updateRegisterActivityIfSuccess();
+
+        void goToMainActivity();
+        void goToListFragment();
     }
 
     public interface saveUserRemote
     {
-        void saveUserToRemote(ClientUser user);
+        void saveUserToRemote(BusinessUser user);
     }
 
-    public void addUser(final ClientUser user, final LoginListener listener)
+    public void addUser(final BusinessUser user, final LoginListener listener)
     {
 
         Model.saveUserRemote sur=new saveUserRemote() {
             @Override
-            public void saveUserToRemote(ClientUser user) {
+            public void saveUserToRemote(BusinessUser user) {
                 modelFirebase.addUser(user,listener);
             }
         };

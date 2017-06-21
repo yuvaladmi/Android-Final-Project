@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center"
-            android:text="@string/register"
+            android:text="@string/sign_in"
             android:textStyle="bold"
             android:textColor="@color/colorPrimary"
             android:textSize="25sp"/>
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center"
-            android:text="@string/sign_in"
+            android:text="@string/register"
             android:textStyle="bold"
             android:textColor="@color/colorPrimary"
             android:textSize="25sp"/>

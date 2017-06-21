@@ -14,7 +14,7 @@ class ModelMem {
         for(int i=0; i<15; i++){
             BusinessUser user = new BusinessUser();
             user.setUserId(""+i*17);
-            user.setName("kuku" + i);
+            user.setfName("kuku" + i);
             user.setAddress("1111");
             user.setEmail("kuku"+i+"@gmail.com");
             user.setImages("");

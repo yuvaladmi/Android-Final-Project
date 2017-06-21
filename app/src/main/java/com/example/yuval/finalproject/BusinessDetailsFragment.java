@@ -62,7 +62,6 @@ public class BusinessDetailsFragment extends Fragment {
         getActivity().setTitle("Business Details");
         View contentView = inflater.inflate(R.layout.fragment_business_details, container, false);
         user = Model.instance.getOneUser(userId);
-        Log.d("tag","got student name : "+user.getName());
 
         TextView nameEt = (TextView) contentView.findViewById(R.id.mainNameTv);
         TextView idEt= (TextView) contentView.findViewById(R.id.mainIdTv);
@@ -71,7 +70,7 @@ public class BusinessDetailsFragment extends Fragment {
        // TextView timeEt= (TextView) contentView.findViewById(R.id.detail_input_time1);
         //TextView dateEt= (TextView) contentView.findViewById(R.id.detail_input_date);
         //CheckBox cb = (CheckBox) contentView.findViewById(R.id.detail_check_box);
-        nameEt.setText(user.getName());
+        nameEt.setText(user.getfName());
         idEt.setText(user.getUserId());
         addressEt.setText(user.getAddress());
         /*phoneEt.setText(user.getPhone());
