@@ -68,6 +68,29 @@ public class BusinessListFragment extends Fragment {
             }
         });
 
+        Model.instance().getAllBusinessUsers(new Model.GetAllUsersListener() {
+            @Override
+            public void onComplete(BusinessUser user) {
+                songsAdapter.add(song);
+            }
+
+            @Override
+            public Context getAppContext() {
+                return MyAppContext.getAppContext();
+            }
+
+            @Override
+            public void showProgressBar() {
+                progressBar.showProgressDialog();
+            }
+
+            @Override
+            public void hideProgressBar() {
+                progressBar.hideProgressDialog();
+            }
+
+        });
+
         return contentView;
     }
 

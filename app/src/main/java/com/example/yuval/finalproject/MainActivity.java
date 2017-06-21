@@ -2,6 +2,7 @@ package com.example.yuval.finalproject;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ public class MainActivity extends Activity
     private Model.LoginListener loginListener;
     private MyProgressBar progressBar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +40,6 @@ public class MainActivity extends Activity
         ftr = getFragmentManager().beginTransaction();
         //add to the screen
         ftr.add(R.id.main_container,mainFragment);
-
-        //show fragment
-        ftr.show(mainFragment);
         ftr.commit();
 
 
@@ -118,10 +117,9 @@ public class MainActivity extends Activity
             public void goToListFragment() {
                 ftr = getFragmentManager().beginTransaction();
                 //add to the screen
-                ftr.add(R.id.main_container,businessListFragment);
+                ftr.replace(R.id.main_container,businessListFragment);
 
-                //show fragment
-                ftr.show(businessListFragment);
+                ftr.addToBackStack("");
                 ftr.commit();
             }
 
@@ -136,10 +134,9 @@ public class MainActivity extends Activity
                 ftr = getFragmentManager().beginTransaction();
 
                 //add to the screen
-                ftr.add(R.id.main_container,signInFragment);
-                ftr.hide(mainFragment);
-                ftr.show(signInFragment);
-                ftr.addToBackStack("main");
+                ftr.replace(R.id.main_container,signInFragment);
+
+                ftr.addToBackStack("");
                 ftr.commit();
             }
 
@@ -148,10 +145,9 @@ public class MainActivity extends Activity
                 ftr = getFragmentManager().beginTransaction();
 
                 //add to the screen
-                ftr.add(R.id.main_container,registerFragment);
-                ftr.hide(mainFragment);
-                ftr.show(registerFragment);
-                ftr.addToBackStack("main");
+                ftr.replace(R.id.main_container,registerFragment);
+
+                ftr.addToBackStack("");
                 ftr.commit();
             }
         });
@@ -250,4 +246,5 @@ public class MainActivity extends Activity
         tran.commit();
      //  getActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
 }

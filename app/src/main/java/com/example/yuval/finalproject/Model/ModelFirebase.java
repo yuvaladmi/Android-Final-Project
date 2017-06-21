@@ -1,5 +1,7 @@
 package com.example.yuval.finalproject.Model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -249,6 +251,97 @@ public class ModelFirebase {
         signOutListener.hideProgressBar();
         mAuth.removeAuthStateListener(mAuthListener);
         signOutListener.goToMainActivity();
+    }
+    public void getAllUsers(final Model.GetAllUsersListener listener){
+        DatabaseReference myRef = database.getReference();
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.hasChild("users"))
+                {
+                    listener.hideProgressBar();
+                    return;
+                }
+
+                DatabaseReference ref = database.getReference("users");
+                ref.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                        if(dataSnapshot==null)
+                        {
+                            listener.hideProgressBar();
+                            return;
+                        }
+
+                        final BusinessUser user=new BusinessUser();
+                        user.setUserId(dataSnapshot.getKey().toString());
+                        user.setfName(dataSnapshot.child("name").getValue().toString());
+                        //Add other parameters
+
+                        /*String absoluteUrl=dataSnapshot.child("imageFileName").getValue().toString();
+
+                        if(!absoluteUrl.equals(""))
+                        {
+                            song.setImageFileNameRemote(absoluteUrl);
+                            Glide.with(MyAppContext.getAppContext())
+                                    .load(absoluteUrl)
+                                    .asBitmap()
+                                    .toBytes()
+                                    .centerCrop()
+                                    .into(new SimpleTarget<byte[]>(200, 200) {
+                                        @Override
+                                        public void onResourceReady(byte[] data, GlideAnimation anim) {
+
+                                            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                                            song.setSongImage(bitmap);
+                                            listener.onComplete(song);
+                                            listener.hideProgressBar();
+
+                                        }
+                                    });
+
+                        }
+                        else
+                        {
+                            song.setSongImage(null);
+                            song.setImageFileNameRemote("");
+                            listener.onComplete(song);
+                            listener.hideProgressBar();
+
+
+                        }*/
+
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

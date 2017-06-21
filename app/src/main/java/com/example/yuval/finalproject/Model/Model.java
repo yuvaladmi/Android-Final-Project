@@ -1,6 +1,7 @@
 package com.example.yuval.finalproject.Model;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 import java.util.List;
@@ -26,14 +27,15 @@ public class Model {
         modelFirebase = new ModelFirebase();
     }
 
-    public List<BusinessUser> getAllBusinessUsers(){
+    public List<BusinessUser> getAllBusinessUsers(Model.GetAllUsersListener listener){
 
         if(BusinessUserSQL.getAllStudents(modelSql.getReadableDatabase()).size() == 0){
             Log.d("TAG", "sql null");
             return modelMem.getAllUsers();
         }
         Log.d("TAG","sql not null");
-        return BusinessUserSQL.getAllStudents(modelSql.getReadableDatabase());
+        //return modelFirebase.getAllUsers(listener);
+        //BusinessUserSQL.getAllStudents(modelSql.getReadableDatabase());
     }
 
     public boolean addNewBusinessUser(BusinessUser newUser){
@@ -177,5 +179,19 @@ public class Model {
     public void signOut(SignOutListener signOutListner)
     {
         modelFirebase.signOut(signOutListner);
+    }
+
+    public interface GetAllUsersListener
+    {
+        void onComplete(BusinessUser user);
+        Context getAppContext();
+        void showProgressBar();
+        void hideProgressBar();
+    }
+
+
+    public void getAllSongs(GetAllUsersListener listener)
+    {
+        modelFirebase.getAllUsers(listener);
     }
 }
