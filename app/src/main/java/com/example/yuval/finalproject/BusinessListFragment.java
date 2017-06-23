@@ -14,9 +14,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.yuval.finalproject.Dialogs.MyProgressBar;
 import com.example.yuval.finalproject.Model.BusinessUser;
 import com.example.yuval.finalproject.Model.Model;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -34,6 +37,9 @@ public class BusinessListFragment extends Fragment {
     List<BusinessUser> data;
     BusinessListAdapter businessListAdapter;
     private OnFragmentInteractionListener mListener;
+    private MyProgressBar progressBar;
+
+
 
     public BusinessListFragment() {
     }
@@ -54,6 +60,7 @@ public class BusinessListFragment extends Fragment {
         getActivity().setTitle("Businesses List");
         View contentView = inflater.inflate(R.layout.fragment_business_list, container, false);
         list = (ListView) contentView.findViewById(R.id.stlist_list);
+        data = new LinkedList<BusinessUser>();
         //data = Model.instance.getAllBusinessUsers();
         businessListAdapter = new BusinessListAdapter();
 
@@ -63,6 +70,7 @@ public class BusinessListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("TAG","item " + position + "was selected");
+                Log.d("TAG","data.get(position).getUserId()==="+data.get(position).getUserId());
                 mListener.onItemSelected(data.get(position).getUserId());
 
             }
@@ -70,24 +78,19 @@ public class BusinessListFragment extends Fragment {
 
         Model.instance().getAllBusinessUsers(new Model.GetAllUsersListener() {
             @Override
-            public void onComplete(BusinessUser user) {
-               // songsAdapter.add(song);
-            }
-
-            @Override
-            public Context getAppContext() {
-                return null;
-                //MyAppContext.getAppContext();
+            public void onComplete(List<BusinessUser> list) {
+                data = list;
+                businessListAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void showProgressBar() {
-               // progressBar.showProgressDialog();
+                progressBar.showProgressDialog();
             }
 
             @Override
             public void hideProgressBar() {
-                //progressBar.hideProgressDialog();
+                progressBar.hideProgressDialog();
             }
 
         });
@@ -121,8 +124,14 @@ public class BusinessListFragment extends Fragment {
         void onItemSelected(String itemId);
     }
     class BusinessListAdapter extends BaseAdapter {
-        LayoutInflater inflater = (LayoutInflater) getActivity().
+//        private List listData = new LinkedList<>();
+        private LayoutInflater inflater = (LayoutInflater) getActivity().
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+//        public BusinessListAdapter(List listData) {
+//            this.listData = listData;
+//        }
+
 
         @Override
         public int getCount() {
@@ -141,28 +150,15 @@ public class BusinessListFragment extends Fragment {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            if(convertView == null){
-                convertView = inflater.inflate(R.layout.business_list_row,null);
-                /*CheckBox cb = (CheckBox) convertView.findViewById(R.id.strow_chack_box);
-                cb.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pos = (int) v.getTag();
-                        Student st = data.get(pos);
-                        st.setChecked(!st.getChecked());
-                    }
-                });*/
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.business_list_row, null);
             }
-
             TextView name = (TextView) convertView.findViewById(R.id.strow_name);
             TextView id = (TextView) convertView.findViewById(R.id.strow_id);
-            ImageView image = (ImageView) convertView.findViewById(R.id.strow_image);
-            //CheckBox cb = (CheckBox) convertView.findViewById(R.id.strow_chack_box);
-            //cb.setTag(position);
 
-            BusinessUser bUser = data.get(position);
-            name.setText(bUser.getfName());
-            id.setText(bUser.getUserId());
+            BusinessUser UserInPosition = (BusinessUser) data.get(position);
+            name.setText(UserInPosition.getfirstName());
+            id.setText(UserInPosition.getUserId());
 
             return convertView;
         }

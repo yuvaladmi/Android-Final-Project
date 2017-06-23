@@ -2,9 +2,13 @@ package com.example.yuval.finalproject.Model;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
+import android.webkit.URLUtil;
 
 import java.util.List;
+
+import static com.example.yuval.finalproject.Model.ModelFiles.saveImageToFile;
 
 /**
  * Created by Yuval on 10/06/2017.
@@ -28,16 +32,31 @@ public class Model {
         modelFirebase = new ModelFirebase();
     }
 
-    public List<BusinessUser> getAllBusinessUsers(Model.GetAllUsersListener listener) {
+    public void getAllBusinessUsers(final GetAllUsersListener listener) {
 
         if (BusinessUserSQL.getAllStudents(modelSql.getReadableDatabase()).size() == 0) {
             Log.d("TAG", "sql null");
-            return modelMem.getAllUsers();
+
         }
         Log.d("TAG", "sql not null");
-        //return modelFirebase.getAllUsers(listener);
+        modelFirebase.getAllUsers(new GetAllUsersListener() {
+            @Override
+            public void onComplete(List<BusinessUser> userList) {
+                listener.onComplete(userList);
+            }
+
+            @Override
+            public void showProgressBar() {
+
+            }
+
+            @Override
+            public void hideProgressBar() {
+
+            }
+        });
         //BusinessUserSQL.getAllStudents(modelSql.getReadableDatabase());
-        return null;
+
     }
 
     public boolean addNewBusinessUser(BusinessUser newUser){
@@ -45,20 +64,26 @@ public class Model {
         return true;
     }
 
-    public BusinessUser getOneUser(String uid) {
+    public void getOneUser(String uid, final ModelFirebase.GetUserCallback callback) {
         //BusinessUserSQL.getUser(modelSql.getReadableDatabase(),uid);
-        return modelMem.getOneUser(uid);
+        modelFirebase.getOneUser(uid, new ModelFirebase.GetUserCallback() {
+            @Override
+            public void onComplete(BusinessUser user) {
+                callback.onComplete(user);
+            }
+
+            @Override
+            public void onCancel() {
+                callback.onCancel();
+            }
+        });
     }
 
 
     public void deleteStudent(BusinessUser user) {
         BusinessUserSQL.deleteUser(modelSql.getReadableDatabase(),user);
     }
-    public boolean setIdCheck(String id){
-        if(getOneUser(id) == null){
-            return true;
-        }else return false;
-    }
+
     public interface LoginListener{
         /**
          * showing progress bar
@@ -133,13 +158,16 @@ public class Model {
         void goToListFragment();
     }
 
-    public interface saveUserRemote
-    {
+    public interface saveUserRemote{
         void saveUserToRemote(BusinessUser user);
     }
 
-    public void addUser(final BusinessUser user, final LoginListener listener)
-    {
+    public interface changeFragmentListner{
+        void goToDetailsFragment();
+        void goToListFragment();
+        void goToEditFragment();
+    }
+    public void addUser(final BusinessUser user, final LoginListener listener){
 
         Model.saveUserRemote sur=new saveUserRemote() {
             @Override
@@ -151,19 +179,16 @@ public class Model {
 
     }
 
-    public void verifyEmail(LoginListener listener)
-    {
+    public void verifyEmail(LoginListener listener){
         modelFirebase.sendEmailVerification(listener);
     }
 
-    public void signInAfterRegister(String email,String password,LoginListener listener)
-    {
+    public void signInAfterRegister(String email,String password,LoginListener listener){
 
         modelFirebase.signInAfterRegister(email,password,listener);
     }
 
-    public void signIn(String email,String password,LoginListener listener)
-    {
+    public void signIn(String email,String password,LoginListener listener){
 
         modelFirebase.signIn(email,password,listener);
 
@@ -172,8 +197,7 @@ public class Model {
     public void checkIfUserAuthonticated(LoginListener loginListener) {
         modelFirebase.checkIfUserAuthonticated(loginListener);
     }
-    public interface SignOutListener
-    {
+    public interface SignOutListener{
         void goToMainActivity();
         void showProgressBar();
         void hideProgressBar();
@@ -183,10 +207,8 @@ public class Model {
         modelFirebase.signOut(signOutListner);
     }
 
-    public interface GetAllUsersListener
-    {
-        void onComplete(BusinessUser user);
-        Context getAppContext();
+    public interface GetAllUsersListener{
+        void onComplete(List<BusinessUser> userList);
         void showProgressBar();
         void hideProgressBar();
     }
@@ -196,4 +218,67 @@ public class Model {
     {
         modelFirebase.getAllUsers(listener);
     }
+
+
+    /*Start Image Section*/
+    public interface SaveImageListener {
+        void complete(String url);
+        void fail();
+    }
+
+    public void saveImage(final Bitmap imageBmp, final String name, final SaveImageListener listener) {
+        modelFirebase.saveImage(imageBmp, name, new SaveImageListener() {
+            @Override
+            public void complete(String url) {
+                String fileName = URLUtil.guessFileName(url, null, null);
+                saveImageToFile(imageBmp,fileName);
+                listener.complete(url);
+            }
+
+            @Override
+            public void fail() {
+                listener.fail();
+            }
+        });
+
+
+    }
+
+
+    public interface GetImageListener{
+        void onSuccess(Bitmap image);
+        void onFail();
+    }
+    public void getImage(final String url, final GetImageListener listener) {
+        //check if image exsist localy
+        final String fileName = URLUtil.guessFileName(url, null, null);
+        ModelFiles.loadImageFromFileAsynch(fileName, new ModelFiles.LoadImageFromFileAsynch() {
+            @Override
+            public void onComplete(Bitmap bitmap) {
+                if (bitmap != null){
+                    Log.d("TAG","getImage from local success " + fileName);
+                    listener.onSuccess(bitmap);
+                }else {
+                    modelFirebase.getImage(url, new GetImageListener() {
+                        @Override
+                        public void onSuccess(Bitmap image) {
+                            String fileName = URLUtil.guessFileName(url, null, null);
+                            Log.d("TAG","getImage from FB success " + fileName);
+                            saveImageToFile(image,fileName);
+                            listener.onSuccess(image);
+                        }
+
+                        @Override
+                        public void onFail() {
+                            Log.d("TAG","getImage from FB fail ");
+                            listener.onFail();
+                        }
+                    });
+
+                }
+            }
+        });
+
+    }
+
 }

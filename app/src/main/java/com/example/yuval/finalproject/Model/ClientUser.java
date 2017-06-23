@@ -10,7 +10,7 @@ public class ClientUser {
 
 
     private String lName;
-    private String fName;
+    private String firstName;
     private String email;
     private String password;
 
@@ -25,12 +25,12 @@ public class ClientUser {
         this.lName = lName;
     }
 
-    public String getfName() {
-        return fName;
+    public String getfirstName() {
+        return firstName;
     }
 
-    public void setfName(String fName) {
-        this.fName = fName;
+    public void setfirstName(String fName) {
+        this.firstName = fName;
     }
 
     public String getUserId() {return userId;}

@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.yuval.finalproject.Model.BusinessUser;
 import com.example.yuval.finalproject.Model.Model;
+import com.example.yuval.finalproject.Model.ModelFirebase;
 
 
 /**
@@ -67,13 +68,77 @@ public class BusinessEditFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getActivity().setTitle("Edit Business");
-        View contentView = inflater.inflate(R.layout.fragment_business_edit, container, false);
-        user = Model.instance.getOneUser(userId);
-        Log.d("TAG","EditItemFragment==="+userId);
-        final EditText nameEt = (EditText) contentView.findViewById(R.id.editNameTv);
-        final EditText idEt = (EditText) contentView.findViewById(R.id.editIdTv);
-        final EditText addreddEt = (EditText) contentView.findViewById(R.id.editAddressTv);
-        final EditText phoneEt = (EditText) contentView.findViewById(R.id.editPhoneTv);
+        final View contentView = inflater.inflate(R.layout.fragment_business_edit, container, false);
+        Model.instance.getOneUser(userId,  new ModelFirebase.GetUserCallback()  {
+            @Override
+            public void onComplete(final BusinessUser user) {
+                BusinessEditFragment.this.user = user;
+                Log.d("TAG","EditItemFragment==="+userId);
+                final EditText nameEt = (EditText) contentView.findViewById(R.id.editNameTv);
+                final EditText idEt = (EditText) contentView.findViewById(R.id.editIdTv);
+                final EditText addreddEt = (EditText) contentView.findViewById(R.id.editAddressTv);
+                final EditText phoneEt = (EditText) contentView.findViewById(R.id.editPhoneTv);
+                nameEt.setText(user.getfirstName());
+                idEt.setText(user.getUserId());
+                addreddEt.setText(user.getAddress());
+        /*phoneEt.setText(user.getPhone());
+        cbEt.setChecked(user.getChecked());
+        if(st.getTime() != null)
+            timePicker.onTimeSet(st.getTime().hour, st.getTime().min);
+        if(st.getDate() != null)
+            datePicker.onDateSet(st.getDate().year,st.getDate().month,st.getDate().day);*/
+                Button saveBtn = (Button) contentView.findViewById(R.id.editSaveBtn);
+                saveBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("TAG","idEt.getText()=="+idEt.getText().toString());
+                        Log.d("TAG","st.getId()=="+user.getUserId());
+                        if(!idEt.getText().toString().equals(user.getUserId())/* &&
+                        !Model.instance.setIdCheck(idEt.getText().toString())*/){
+                            Toast.makeText(getActivity(), "Student Already exists!", Toast.LENGTH_LONG).show();
+                        }else{
+                            Log.d("TAG","save");
+                            user.setUserId(idEt.getText().toString());
+                            user.setfirstName(nameEt.getText().toString());
+                            user.setAddress(addreddEt.getText().toString());
+                    /*user.setPhone(phoneEt.getText().toString());
+                    user.setDate(datePicker);
+                    user.setTime(timePicker);*/
+                            mListener.onSaveSelected();
+                        }
+
+                    }
+                });
+
+                Button cancelBtn = (Button) contentView.findViewById(R.id.editCancelBtn);
+                cancelBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                /*if(flag == 1){
+                    st.setChecked(!st.getChecked());
+                    Log.d("TAG","flag = 1");
+                }*/
+                        getFragmentManager().popBackStack();
+                    }
+                });
+
+                Button deleteBtn = (Button) contentView.findViewById(R.id.editDeleteBtn);
+                deleteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Model.instance.deleteStudent(user);
+                        mListener.onDeleteSelected();
+                    }
+                });
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d("TAG","get user cancell" );
+
+            }
+        });
+
         //final MyTimePicker timePicker = (MyTimePicker) contentView.findViewById(R.id.edit_input_time1);
         //final MyDatePicker datePicker = (MyDatePicker) contentView.findViewById(R.id.edit_input_date);
         /*final CheckBox cbEt = (CheckBox) contentView.findViewById(R.id.edit_check_box);
@@ -85,58 +150,7 @@ public class BusinessEditFragment extends Fragment {
             }
         });*/
 
-        nameEt.setText(user.getfName());
-        idEt.setText(user.getUserId());
-        addreddEt.setText(user.getAddress());
-        /*phoneEt.setText(user.getPhone());
-        cbEt.setChecked(user.getChecked());
-        if(st.getTime() != null)
-            timePicker.onTimeSet(st.getTime().hour, st.getTime().min);
-        if(st.getDate() != null)
-            datePicker.onDateSet(st.getDate().year,st.getDate().month,st.getDate().day);*/
-        Button saveBtn = (Button) contentView.findViewById(R.id.editSaveBtn);
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("TAG","idEt.getText()=="+idEt.getText().toString());
-                Log.d("TAG","st.getId()=="+user.getUserId());
-                if(!idEt.getText().toString().equals(user.getUserId()) &&
-                        !Model.instance.setIdCheck(idEt.getText().toString())){
-                    Toast.makeText(getActivity(), "Student Already exists!", Toast.LENGTH_LONG).show();
-                }else{
-                    Log.d("TAG","save");
-                    user.setUserId(idEt.getText().toString());
-                    user.setfName(nameEt.getText().toString());
-                    user.setAddress(addreddEt.getText().toString());
-                    /*user.setPhone(phoneEt.getText().toString());
-                    user.setDate(datePicker);
-                    user.setTime(timePicker);*/
-                    mListener.onSaveSelected();
-                }
 
-            }
-        });
-
-        Button cancelBtn = (Button) contentView.findViewById(R.id.editCancelBtn);
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*if(flag == 1){
-                    st.setChecked(!st.getChecked());
-                    Log.d("TAG","flag = 1");
-                }*/
-                getFragmentManager().popBackStack();
-            }
-        });
-
-        Button deleteBtn = (Button) contentView.findViewById(R.id.editDeleteBtn);
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Model.instance.deleteStudent(user);
-                mListener.onDeleteSelected();
-            }
-        });
         return contentView;
     }
 

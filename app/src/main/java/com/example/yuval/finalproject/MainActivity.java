@@ -23,7 +23,10 @@ public class MainActivity extends Activity
     private RegisterFragment registerFragment;
     private SignInFragment signInFragment;
     private BusinessListFragment businessListFragment;
+    private BusinessDetailsFragment businessDetailsFragment;
+    private BusinessEditFragment businessEditFragment;
     private Model.LoginListener loginListener;
+    private Model.changeFragmentListner changeFragmentListner;
     private MyProgressBar progressBar;
 
 
@@ -37,6 +40,8 @@ public class MainActivity extends Activity
         signInFragment=new SignInFragment();
         registerFragment=new RegisterFragment();
         businessListFragment = new BusinessListFragment();
+        businessDetailsFragment = new BusinessDetailsFragment();
+        businessEditFragment = new BusinessEditFragment();
         ftr = getFragmentManager().beginTransaction();
         //add to the screen
         ftr.add(R.id.main_container,mainFragment);
@@ -125,7 +130,7 @@ public class MainActivity extends Activity
 
 
         };
-        //if a user is already authenticated sign him.
+
         Model.instance().checkIfUserAuthonticated(loginListener);
 
         mainFragment.setDelegate(new MainFragment.Delegate() {

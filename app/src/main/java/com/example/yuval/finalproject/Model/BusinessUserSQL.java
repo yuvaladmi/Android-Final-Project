@@ -28,7 +28,7 @@ public class BusinessUserSQL {
             do {
                 BusinessUser user = new BusinessUser();
                 user.setUserId( cursor.getString(idIndex));
-                user.setfName(cursor.getString(nameIndex));
+                user.setfirstName(cursor.getString(nameIndex));
                 user.setImages(cursor.getString(imageUrlIndex));
                 list.add(user);
             } while (cursor.moveToNext());
@@ -39,7 +39,7 @@ public class BusinessUserSQL {
     static void addStudent(SQLiteDatabase db, BusinessUser user) {
         ContentValues values = new ContentValues();
         values.put(USER_ID, user.getUserId());
-        values.put(USER_NAME, user.getfName());
+        values.put(USER_NAME, user.getfirstName());
         values.put(USER_IMAGE_URL, user.getImages());
         db.insert(USER_TABLE, USER_ID, values);
     }
@@ -56,7 +56,7 @@ public class BusinessUserSQL {
 
             BusinessUser user = new BusinessUser();
             user.setUserId( cursor.getString(idIndex));
-            user.setfName(cursor.getString(nameIndex));
+            user.setfirstName(cursor.getString(nameIndex));
             user.setImages(cursor.getString(imageUrlIndex));
 
             return user;

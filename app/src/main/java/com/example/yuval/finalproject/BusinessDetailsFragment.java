@@ -16,13 +16,14 @@ import android.widget.TextView;
 
 import com.example.yuval.finalproject.Model.BusinessUser;
 import com.example.yuval.finalproject.Model.Model;
+import com.example.yuval.finalproject.Model.ModelFirebase;
 
 
 public class BusinessDetailsFragment extends Fragment {
     private static final String ARG_PARAM1 = "userId";
 
     private String userId;
-    private BusinessUser user;
+    BusinessUser user;
 
     private OnFragmentInteractionListener mListener;
 
@@ -59,20 +60,34 @@ public class BusinessDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getActivity().setTitle("Business Details");
-        View contentView = inflater.inflate(R.layout.fragment_business_details, container, false);
-        user = Model.instance.getOneUser(userId);
 
-        TextView nameEt = (TextView) contentView.findViewById(R.id.mainNameTv);
-        TextView idEt= (TextView) contentView.findViewById(R.id.mainIdTv);
-        TextView addressEt= (TextView) contentView.findViewById(R.id.detailsAddressTv);
-        TextView phoneEt= (TextView) contentView.findViewById(R.id.detailsPhoneTv);
-       // TextView timeEt= (TextView) contentView.findViewById(R.id.detail_input_time1);
-        //TextView dateEt= (TextView) contentView.findViewById(R.id.detail_input_date);
-        //CheckBox cb = (CheckBox) contentView.findViewById(R.id.detail_check_box);
-        nameEt.setText(user.getfName());
-        idEt.setText(user.getUserId());
-        addressEt.setText(user.getAddress());
+            getActivity().setTitle("Business Details");
+            final View contentView = inflater.inflate(R.layout.fragment_business_details, container, false);
+            Model.instance.getOneUser(userId, new ModelFirebase.GetUserCallback() {
+                @Override
+                public void onComplete(BusinessUser user) {
+                    BusinessDetailsFragment.this.user = user;
+                    TextView nameEt = (TextView) contentView.findViewById(R.id.mainNameTv);
+                    TextView idEt= (TextView) contentView.findViewById(R.id.mainIdTv);
+                    TextView addressEt= (TextView) contentView.findViewById(R.id.detailsAddressTv);
+                    TextView phoneEt= (TextView) contentView.findViewById(R.id.detailsPhoneTv);
+                    // TextView timeEt= (TextView) contentView.findViewById(R.id.detail_input_time1);
+                    //TextView dateEt= (TextView) contentView.findViewById(R.id.detail_input_date);
+                    //CheckBox cb = (CheckBox) contentView.findViewById(R.id.detail_check_box);
+                    nameEt.setText(user.getfirstName());
+                    idEt.setText(user.getUserId());
+                    addressEt.setText(user.getAddress());
+                    Log.d("TAG", "got student name: " + user.getfirstName());
+                }
+
+                @Override
+                public void onCancel() {
+                    Log.d("TAG", "get student cancell");
+
+                }
+            });
+
+            return contentView;
         /*phoneEt.setText(user.getPhone());
         if(user.getTime() != null)
             timeEt.setText(user.getTime().getText());
@@ -80,8 +95,9 @@ public class BusinessDetailsFragment extends Fragment {
             dateEt.setText(user.getDate().getText());
         cb.setChecked(user.getChecked());
         cb.setEnabled(false);*/
-        return contentView;
+
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();

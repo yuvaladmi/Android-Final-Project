@@ -2,9 +2,15 @@ package com.example.yuval.finalproject.Model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.example.yuval.finalproject.BusinessEditFragment;
+import com.example.yuval.finalproject.BusinessListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,7 +27,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Yuval on 10/06/2017.
@@ -111,7 +120,7 @@ public class ModelFirebase {
 
         //saving user deatails to storage
         HashMap<String, Object> result = new HashMap<>();
-        result.put("firstName",user.getfName());
+        result.put("firstName",user.getfirstName());
         result.put("lastName",user.getlName());
 
 
@@ -252,89 +261,22 @@ public class ModelFirebase {
         mAuth.removeAuthStateListener(mAuthListener);
         signOutListener.goToMainActivity();
     }
-    public void getAllUsers(final Model.GetAllUsersListener listener){
-        DatabaseReference myRef = database.getReference();
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+
+    public void getAllUsers(final Model.GetAllUsersListener callback){
+
+        DatabaseReference myRef = database.getReference("users");
+        ValueEventListener listner = myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.hasChild("users"))
-                {
-                    listener.hideProgressBar();
-                    return;
+                List<BusinessUser> list = new LinkedList<BusinessUser>();
+                for(DataSnapshot snap : dataSnapshot.getChildren()){
+                    BusinessUser user = snap.getValue(BusinessUser.class);
+                    user.setUserId(snap.getKey());
+                    list.add(user);
                 }
-
-                DatabaseReference ref = database.getReference("users");
-                ref.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                        if(dataSnapshot==null)
-                        {
-                            listener.hideProgressBar();
-                            return;
-                        }
-
-                        final BusinessUser user=new BusinessUser();
-                        user.setUserId(dataSnapshot.getKey().toString());
-                        user.setfName(dataSnapshot.child("name").getValue().toString());
-                        //Add other parameters
-
-                        /*String absoluteUrl=dataSnapshot.child("imageFileName").getValue().toString();
-
-                        if(!absoluteUrl.equals(""))
-                        {
-                            song.setImageFileNameRemote(absoluteUrl);
-                            Glide.with(MyAppContext.getAppContext())
-                                    .load(absoluteUrl)
-                                    .asBitmap()
-                                    .toBytes()
-                                    .centerCrop()
-                                    .into(new SimpleTarget<byte[]>(200, 200) {
-                                        @Override
-                                        public void onResourceReady(byte[] data, GlideAnimation anim) {
-
-                                            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                                            song.setSongImage(bitmap);
-                                            listener.onComplete(song);
-                                            listener.hideProgressBar();
-
-                                        }
-                                    });
-
-                        }
-                        else
-                        {
-                            song.setSongImage(null);
-                            song.setImageFileNameRemote("");
-                            listener.onComplete(song);
-                            listener.hideProgressBar();
-
-
-                        }*/
-
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
+                callback.onComplete(list);
             }
 
             @Override
@@ -342,6 +284,112 @@ public class ModelFirebase {
 
             }
         });
+
+
+        /*myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChild("users")) {
+                    callback.hideProgressBar();
+                    return;
+                }
+
+                DatabaseReference myRef = database.getReference("users");
+
+                ValueEventListener listener = myRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        List<BusinessUser> list = new LinkedList<BusinessUser>();
+                        for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                            BusinessUser user = snap.getValue(BusinessUser.class);
+                            list.add(user);
+                        }
+                        callback.onComplete(list);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+
+
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });*/
     }
 
+
+    public interface GetUserCallback {
+        void onComplete(BusinessUser user);
+
+        void onCancel();
+    }
+
+    public void getOneUser(String usrId, final GetUserCallback callback) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("users");
+        myRef.child(usrId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                BusinessUser user = dataSnapshot.getValue(BusinessUser.class);
+                callback.onComplete(user);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onCancel();
+            }
+        });
+    }
+
+    /*Start Image Section*/
+    public void saveImage(Bitmap imageBmp, String name, final Model.SaveImageListener listener){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+
+        StorageReference imagesRef = storage.getReference().child("images").child(name);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        imageBmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = imagesRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(Exception exception) {
+                listener.fail();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                listener.complete(downloadUrl.toString());
+            }
+        });
+    }
+
+
+    public void getImage(String url, final Model.GetImageListener listener){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference httpsReference = storage.getReferenceFromUrl(url);
+        final long ONE_MEGABYTE = 1024 * 1024;
+        httpsReference.getBytes(3* ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap image = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                listener.onSuccess(image);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(Exception exception) {
+                Log.d("TAG",exception.getMessage());
+                listener.onFail();
+            }
+        });
+    }
+    /*End Image Section*/
 }
