@@ -210,13 +210,13 @@ public class Model {
     }
 
 
-    public void getAllSongs(GetAllUsersListener listener)
-    {
-        modelFirebase.getAllUsers(listener);
-    }
-
     public String getConnectedUserID(){
         return modelFirebase.getConnectedUserID();
+    }
+
+    public void updateUser(BusinessUser user){
+        modelFirebase.updateUser(user);
+        BusinessUserSQL.updateUser(modelSql.getWritableDatabase(), user);
     }
 
     /*Start Image Section*/

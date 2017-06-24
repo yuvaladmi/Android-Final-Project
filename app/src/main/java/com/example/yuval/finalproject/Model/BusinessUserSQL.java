@@ -75,6 +75,18 @@ public class BusinessUserSQL {
             addUser(db, user);
     }
 
+    public static void updateUser(SQLiteDatabase db,BusinessUser user){
+        ContentValues values = new ContentValues();
+        values.put(USER_ID, user.getUserId());
+        values.put(USER_NAME, user.getfirstName());
+        values.put(USER_IMAGE_URL, user.getImages());
+
+        String[] whereArgs = new String[] {
+                user.getUserId()
+        };
+        db.update(USER_TABLE, values,USER_ID+"=?",whereArgs);
+    }
+
     static public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + USER_TABLE +
                 " (" +

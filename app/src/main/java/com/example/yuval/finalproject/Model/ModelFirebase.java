@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.example.yuval.finalproject.BusinessDetailsFragment;
 import com.example.yuval.finalproject.BusinessEditFragment;
 import com.example.yuval.finalproject.BusinessListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -121,16 +122,13 @@ public class ModelFirebase {
         //saving user deatails to storage
         HashMap<String, Object> result = new HashMap<>();
         result.put("firstName",user.getfirstName());
-        result.put("lastName",user.getlName());
-
+        result.put("lastName",user.getlastName());
+        result.put("images",user.getImages());
 
         DatabaseReference myRef = database.getReference("users").child(user.getUserId());
         myRef.setValue(result);
 
         viewlistener.hideProgressBar();
-
-
-
     }
 
     /**
@@ -284,43 +282,6 @@ public class ModelFirebase {
 
             }
         });
-
-
-        /*myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.hasChild("users")) {
-                    callback.hideProgressBar();
-                    return;
-                }
-
-                DatabaseReference myRef = database.getReference("users");
-
-                ValueEventListener listener = myRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        List<BusinessUser> list = new LinkedList<BusinessUser>();
-                        for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                            BusinessUser user = snap.getValue(BusinessUser.class);
-                            list.add(user);
-                        }
-                        callback.onComplete(list);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-
-
-                });
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
     }
 
 
@@ -345,6 +306,12 @@ public class ModelFirebase {
                 callback.onCancel();
             }
         });
+    }
+
+    public void updateUser(BusinessUser user){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("users");
+        myRef.child(user.getUserId()).setValue(user);
     }
 
     public String getConnectedUserID(){
@@ -374,6 +341,8 @@ public class ModelFirebase {
                 listener.complete(downloadUrl.toString());
             }
         });
+
+
     }
 
 

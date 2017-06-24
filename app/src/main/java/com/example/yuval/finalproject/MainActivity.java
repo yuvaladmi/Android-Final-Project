@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +31,7 @@ public class MainActivity extends Activity
     private Model.LoginListener loginListener;
     private Model.changeFragmentListner changeFragmentListner;
     private MyProgressBar progressBar;
-
+    static final int REQUEST_WRITE_STORAGE = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,6 +189,13 @@ public class MainActivity extends Activity
                 Model.instance().signIn(email,password,loginListener);
             }
         });
+
+        boolean hasPermission =
+                (ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE) ==  PackageManager.PERMISSION_GRANTED);
+        if (!hasPermission) {
+            ActivityCompat.requestPermissions(this,new String[]{
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE);
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -251,5 +261,6 @@ public class MainActivity extends Activity
         tran.commit();
      //  getActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
 
 }

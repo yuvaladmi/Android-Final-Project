@@ -9,7 +9,7 @@ public class ClientUser {
 
 
 
-    private String lName;
+    private String lastName;
     private String firstName;
     private String email;
     private String password;
@@ -17,12 +17,12 @@ public class ClientUser {
     public ClientUser(){
     }
 
-    public String getlName() {
-        return lName;
+    public String getlastName() {
+        return lastName;
     }
 
-    public void setlName(String lName) {
-        this.lName = lName;
+    public void setlastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getfirstName() {

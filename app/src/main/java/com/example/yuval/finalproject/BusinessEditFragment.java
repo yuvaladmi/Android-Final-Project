@@ -2,8 +2,11 @@ package com.example.yuval.finalproject;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,12 +17,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.yuval.finalproject.Dialogs.MyProgressBar;
 import com.example.yuval.finalproject.Model.BusinessUser;
 import com.example.yuval.finalproject.Model.Model;
 import com.example.yuval.finalproject.Model.ModelFirebase;
 
+import static android.app.Activity.RESULT_OK;
+import static android.view.View.GONE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,6 +43,9 @@ public class BusinessEditFragment extends Fragment {
     public int flag = 0;
     private String userId;
     private BusinessEditFragment.OnFragmentInteractionListener mListener;
+    Bitmap imageBitmap;
+    ProgressBar progressBar;
+    ImageView imageView;
 
     public BusinessEditFragment() {
         setHasOptionsMenu(true);
@@ -69,93 +80,86 @@ public class BusinessEditFragment extends Fragment {
                              Bundle savedInstanceState) {
         getActivity().setTitle("Edit Business");
         final View contentView = inflater.inflate(R.layout.fragment_business_edit, container, false);
-       /* Model.instance.getOneUser(userId,  new ModelFirebase.GetUserCallback()  {
+        user = Model.instance.getOneUser(userId);
+        final EditText nameEt = (EditText) contentView.findViewById(R.id.editNameTv);
+        final EditText idEt = (EditText) contentView.findViewById(R.id.editIdTv);
+        final EditText addreddEt = (EditText) contentView.findViewById(R.id.editAddressTv);
+        EditText phoneEt = (EditText) contentView.findViewById(R.id.editPhoneTv);
+        nameEt.setText(user.getfirstName());
+        idEt.setText(user.getUserId());
+        addreddEt.setText(user.getAddress());
+
+
+
+
+        imageView = (ImageView) contentView.findViewById(R.id.mainImageView);
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(final BusinessUser user) {
-                BusinessEditFragment.this.user = user;
-                Log.d("TAG","EditItemFragment==="+userId);
-                final EditText nameEt = (EditText) contentView.findViewById(R.id.editNameTv);
-                final EditText idEt = (EditText) contentView.findViewById(R.id.editIdTv);
-                final EditText addreddEt = (EditText) contentView.findViewById(R.id.editAddressTv);
-                final EditText phoneEt = (EditText) contentView.findViewById(R.id.editPhoneTv);
-                nameEt.setText(user.getfirstName());
-                idEt.setText(user.getUserId());
-                addreddEt.setText(user.getAddress());
-        /*phoneEt.setText(user.getPhone());
-        cbEt.setChecked(user.getChecked());
-        if(st.getTime() != null)
-            timePicker.onTimeSet(st.getTime().hour, st.getTime().min);
-        if(st.getDate() != null)
-            datePicker.onDateSet(st.getDate().year,st.getDate().month,st.getDate().day);*/
-               /* Button saveBtn = (Button) contentView.findViewById(R.id.editSaveBtn);
-                saveBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d("TAG","idEt.getText()=="+idEt.getText().toString());
-                        Log.d("TAG","st.getId()=="+user.getUserId());
-                        if(!idEt.getText().toString().equals(user.getUserId())/* &&
-                        !Model.instance.setIdCheck(idEt.getText().toString())*//*){
-                            Toast.makeText(getActivity(), "Student Already exists!", Toast.LENGTH_LONG).show();
-                        }else{
-                            Log.d("TAG","save");
-                            user.setUserId(idEt.getText().toString());
-                            user.setfirstName(nameEt.getText().toString());
-                            user.setAddress(addreddEt.getText().toString());
-                    /*user.setPhone(phoneEt.getText().toString());
-                    user.setDate(datePicker);
-                    user.setTime(timePicker);*/
-                           /* mListener.onSaveSelected();
+            public void onClick(View v) {
+                dispatchTakePictureIntent();
+            }
+        });
+
+
+
+        Button saveBtn = (Button) contentView.findViewById(R.id.editSaveBtn);
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("TAG", "st.getId()==" + user.getUserId());
+                if (imageBitmap != null) {
+                    Model.instance.saveImage(imageBitmap, user.getUserId() + ".jpeg", new Model.SaveImageListener() {
+                        @Override
+                        public void complete(String url) {
+                            user.setImages(url);
+                            Model.instance.updateUser(user);
+                            // progressBar.setVisibility(GONE);
                         }
 
-                    }
-                });
-
-                Button cancelBtn = (Button) contentView.findViewById(R.id.editCancelBtn);
-                cancelBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                /*if(flag == 1){
-                    st.setChecked(!st.getChecked());
-                    Log.d("TAG","flag = 1");
-                }*/
-                     /*   getFragmentManager().popBackStack();
-                    }
-                });
-
-                Button deleteBtn = (Button) contentView.findViewById(R.id.editDeleteBtn);
-                deleteBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Model.instance.deleteStudent(user);
-                        mListener.onDeleteSelected();
-                    }
-                });
+                        @Override
+                        public void fail() {
+                            //notify operation fail,...
+                        }
+                    });
+                }else{
+                    Model.instance.updateUser(user);
+                    //rogressBar.setVisibility(GONE);
+                }
+                user.setfirstName(nameEt.getText().toString());
+                user.setAddress(addreddEt.getText().toString());
+                user.setImages(imageBitmap.toString());
+                Model.instance.updateUser(user);
+                mListener.onSaveSelected();
             }
+        });
 
+        Button cancelBtn = (Button) contentView.findViewById(R.id.editCancelBtn);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCancel() {
-                Log.d("TAG","get user cancell" );
+            public void onClick (View v){
 
             }
         });
 
-        //final MyTimePicker timePicker = (MyTimePicker) contentView.findViewById(R.id.edit_input_time1);
-        //final MyDatePicker datePicker = (MyDatePicker) contentView.findViewById(R.id.edit_input_date);
-        /*final CheckBox cbEt = (CheckBox) contentView.findViewById(R.id.edit_check_box);
-        cbEt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                st.setChecked(!st.getChecked());
-                flag = 1;
-            }
-        });*/
-
-
         return contentView;
     }
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+        }
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -180,5 +184,7 @@ public class BusinessEditFragment extends Fragment {
         void onSaveSelected();
         void onDeleteSelected();
     }
+
+
 
 }
