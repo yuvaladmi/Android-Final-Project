@@ -34,15 +34,11 @@ public class Model {
 
     public void getAllBusinessUsers(final GetAllUsersListener listener) {
 
-        if (BusinessUserSQL.getAllStudents(modelSql.getReadableDatabase()).size() == 0) {
-            Log.d("TAG", "sql null");
-
-        }
-        Log.d("TAG", "sql not null");
         modelFirebase.getAllUsers(new GetAllUsersListener() {
             @Override
             public void onComplete(List<BusinessUser> userList) {
                 listener.onComplete(userList);
+                BusinessUserSQL.addUsersToDB(modelSql.getWritableDatabase(),userList);
             }
 
             @Override
@@ -60,13 +56,13 @@ public class Model {
     }
 
     public boolean addNewBusinessUser(BusinessUser newUser){
-        BusinessUserSQL.addStudent(modelSql.getWritableDatabase(),newUser);
+        BusinessUserSQL.addUser(modelSql.getWritableDatabase(),newUser);
         return true;
     }
 
-    public void getOneUser(String uid, final ModelFirebase.GetUserCallback callback) {
-        //BusinessUserSQL.getUser(modelSql.getReadableDatabase(),uid);
-        modelFirebase.getOneUser(uid, new ModelFirebase.GetUserCallback() {
+    public BusinessUser getOneUser(String uid){//, final ModelFirebase.GetUserCallback callback) {
+        return BusinessUserSQL.getUser(modelSql.getReadableDatabase(),uid);
+        /*modelFirebase.getOneUser(uid, new ModelFirebase.GetUserCallback() {
             @Override
             public void onComplete(BusinessUser user) {
                 callback.onComplete(user);
@@ -76,7 +72,7 @@ public class Model {
             public void onCancel() {
                 callback.onCancel();
             }
-        });
+        });*/
     }
 
 
@@ -219,6 +215,9 @@ public class Model {
         modelFirebase.getAllUsers(listener);
     }
 
+    public String getConnectedUserID(){
+        return modelFirebase.getConnectedUserID();
+    }
 
     /*Start Image Section*/
     public interface SaveImageListener {

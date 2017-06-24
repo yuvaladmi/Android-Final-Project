@@ -69,7 +69,7 @@ public class BusinessEditFragment extends Fragment {
                              Bundle savedInstanceState) {
         getActivity().setTitle("Edit Business");
         final View contentView = inflater.inflate(R.layout.fragment_business_edit, container, false);
-        Model.instance.getOneUser(userId,  new ModelFirebase.GetUserCallback()  {
+       /* Model.instance.getOneUser(userId,  new ModelFirebase.GetUserCallback()  {
             @Override
             public void onComplete(final BusinessUser user) {
                 BusinessEditFragment.this.user = user;
@@ -87,14 +87,14 @@ public class BusinessEditFragment extends Fragment {
             timePicker.onTimeSet(st.getTime().hour, st.getTime().min);
         if(st.getDate() != null)
             datePicker.onDateSet(st.getDate().year,st.getDate().month,st.getDate().day);*/
-                Button saveBtn = (Button) contentView.findViewById(R.id.editSaveBtn);
+               /* Button saveBtn = (Button) contentView.findViewById(R.id.editSaveBtn);
                 saveBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.d("TAG","idEt.getText()=="+idEt.getText().toString());
                         Log.d("TAG","st.getId()=="+user.getUserId());
                         if(!idEt.getText().toString().equals(user.getUserId())/* &&
-                        !Model.instance.setIdCheck(idEt.getText().toString())*/){
+                        !Model.instance.setIdCheck(idEt.getText().toString())*//*){
                             Toast.makeText(getActivity(), "Student Already exists!", Toast.LENGTH_LONG).show();
                         }else{
                             Log.d("TAG","save");
@@ -104,7 +104,7 @@ public class BusinessEditFragment extends Fragment {
                     /*user.setPhone(phoneEt.getText().toString());
                     user.setDate(datePicker);
                     user.setTime(timePicker);*/
-                            mListener.onSaveSelected();
+                           /* mListener.onSaveSelected();
                         }
 
                     }
@@ -118,7 +118,7 @@ public class BusinessEditFragment extends Fragment {
                     st.setChecked(!st.getChecked());
                     Log.d("TAG","flag = 1");
                 }*/
-                        getFragmentManager().popBackStack();
+                     /*   getFragmentManager().popBackStack();
                     }
                 });
 

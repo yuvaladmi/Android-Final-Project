@@ -45,6 +45,10 @@ public class BusinessDetailsFragment extends Fragment {
         inflater.inflate(R.menu.edit, menu);
         MenuItem menuItem = menu.findItem(R.id.main_add);
         menuItem.setVisible(false);
+        MenuItem editMenuItem = menu.findItem(R.id.main_edit);
+        if(user.getUserId().equals(Model.instance.getConnectedUserID()) )
+            editMenuItem.setVisible(true);
+        else editMenuItem.setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
     @Override
@@ -63,7 +67,7 @@ public class BusinessDetailsFragment extends Fragment {
 
             getActivity().setTitle("Business Details");
             final View contentView = inflater.inflate(R.layout.fragment_business_details, container, false);
-            Model.instance.getOneUser(userId, new ModelFirebase.GetUserCallback() {
+            this.user = Model.instance.getOneUser(userId);/*, new ModelFirebase.GetUserCallback() {
                 @Override
                 public void onComplete(BusinessUser user) {
                     BusinessDetailsFragment.this.user = user;
@@ -85,8 +89,18 @@ public class BusinessDetailsFragment extends Fragment {
                     Log.d("TAG", "get student cancell");
 
                 }
-            });
-
+            });*/
+            TextView nameEt = (TextView) contentView.findViewById(R.id.mainNameTv);
+            TextView idEt= (TextView) contentView.findViewById(R.id.mainIdTv);
+            TextView addressEt= (TextView) contentView.findViewById(R.id.detailsAddressTv);
+            TextView phoneEt= (TextView) contentView.findViewById(R.id.detailsPhoneTv);
+            // TextView timeEt= (TextView) contentView.findViewById(R.id.detail_input_time1);
+            //TextView dateEt= (TextView) contentView.findViewById(R.id.detail_input_date);
+            //CheckBox cb = (CheckBox) contentView.findViewById(R.id.detail_check_box);
+            nameEt.setText(user.getfirstName());
+            idEt.setText(user.getUserId());
+            addressEt.setText(user.getAddress());
+            Log.d("TAG", "got student name: " + user.getfirstName());
             return contentView;
         /*phoneEt.setText(user.getPhone());
         if(user.getTime() != null)

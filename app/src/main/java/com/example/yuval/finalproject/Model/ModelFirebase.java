@@ -347,6 +347,10 @@ public class ModelFirebase {
         });
     }
 
+    public String getConnectedUserID(){
+        return mAuth.getCurrentUser().getUid();
+    }
+
     /*Start Image Section*/
     public void saveImage(Bitmap imageBmp, String name, final Model.SaveImageListener listener){
         FirebaseStorage storage = FirebaseStorage.getInstance();

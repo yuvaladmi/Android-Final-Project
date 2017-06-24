@@ -113,7 +113,8 @@ public class RegisterFragment extends Fragment {
     public BusinessUser setUserDetails()
     {
         BusinessUser user = new BusinessUser();
-        user.setfirstName(lNameET.getText().toString());
+        user.setfirstName(fNameET.getText().toString());
+        user.setlName(lNameET.getText().toString());
         user.setEmail(emailET.getText().toString());
         user.setPassword(passwordET.getText().toString());
 

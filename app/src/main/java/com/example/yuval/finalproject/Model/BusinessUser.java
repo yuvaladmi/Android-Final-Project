@@ -5,6 +5,7 @@ package com.example.yuval.finalproject.Model;
  */
 
 public class BusinessUser extends ClientUser {
+
     private String address;
     private String treatments;
     private String images;

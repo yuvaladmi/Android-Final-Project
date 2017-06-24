@@ -12,13 +12,13 @@ import java.util.List;
  */
 
 public class BusinessUserSQL {
-    static final String USER_TABLE = "students";
-    static final String USER_ID = "stid";
+    static final String USER_TABLE = "users";
+    static final String USER_ID = "userId";
     static final String USER_NAME = "name";
     static final String USER_IMAGE_URL = "imageUrl";
 
     static List<BusinessUser> getAllStudents(SQLiteDatabase db) {
-        Cursor cursor = db.query("students", null, null, null, null, null, null);
+        Cursor cursor = db.query(USER_TABLE, null, null, null, null, null, null);
         List<BusinessUser> list = new LinkedList<BusinessUser>();
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(USER_ID);
@@ -36,7 +36,7 @@ public class BusinessUserSQL {
         return list;
     }
 
-    static void addStudent(SQLiteDatabase db, BusinessUser user) {
+    static void addUser(SQLiteDatabase db, BusinessUser user) {
         ContentValues values = new ContentValues();
         values.put(USER_ID, user.getUserId());
         values.put(USER_NAME, user.getfirstName());
@@ -68,6 +68,11 @@ public class BusinessUserSQL {
                 user.getUserId()
         };
         db.delete(USER_TABLE,USER_ID+"=?",whereArgs);
+    }
+
+    public static void addUsersToDB(SQLiteDatabase db, List<BusinessUser> userList){
+        for(BusinessUser user : userList)
+            addUser(db, user);
     }
 
     static public void onCreate(SQLiteDatabase db) {
