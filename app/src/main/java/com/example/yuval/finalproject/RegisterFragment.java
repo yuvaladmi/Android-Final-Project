@@ -21,13 +21,21 @@ public class RegisterFragment extends Fragment {
     EditText emailET;
     EditText passwordET;
 
-    CheckBox isBus;
+
     TableLayout tablebus;
     Boolean flage=false;
+    Boolean flageNail=false;
+    Boolean flageLeser=false;
 
     //buttons
     Button verifyEmailBtn;
     Button registerBtn;
+
+    CheckBox isBus;
+    CheckBox leser;
+    CheckBox nail;
+
+    EditText add;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -55,7 +63,7 @@ public class RegisterFragment extends Fragment {
         lNameET=(EditText)view.findViewById(R.id.fragment_register_lName_editText);
         emailET=(EditText)view.findViewById(R.id.fragment_register_email_editText);
         passwordET=(EditText)view.findViewById(R.id.fragment_register_password_editText);
-
+        add=(EditText)view.findViewById(R.id.fragment_register_address_editText);
         verifyEmailBtn=(Button)view.findViewById(R.id.fragment_register_verifyEmail_btn);
         registerBtn=(Button)view.findViewById(R.id.fragment_register_btn);
 
@@ -64,6 +72,9 @@ public class RegisterFragment extends Fragment {
         isBus= (CheckBox)view.findViewById(R.id.fragment_register_isBusiness);
         tablebus= (TableLayout) view.findViewById(R.id.fragment_register_table_bus);
         tablebus.setVisibility(View.GONE);
+
+        leser= (CheckBox) view.findViewById(R.id.fragment_register_Laser_hair_removal);
+        nail=(CheckBox) view.findViewById(R.id.fragment_register_Gel_nail_polish);
 
 
         isBus.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +90,20 @@ public class RegisterFragment extends Fragment {
                 }
 
 
+            }
+        });
+
+        leser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flageLeser=!flageLeser;
+            }
+        });
+
+        nail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flageNail=!flageNail;
             }
         });
 
@@ -117,6 +142,28 @@ public class RegisterFragment extends Fragment {
         user.setlastName(lNameET.getText().toString());
         user.setEmail(emailET.getText().toString());
         user.setPassword(passwordET.getText().toString());
+        user.setBusiness(flage);
+
+        if (flage)
+        {
+            user.setAddress(add.getText().toString());
+            user.setGelNail(flageNail);
+            user.setLaserHair(flageLeser);
+        }
+
+
+        /*
+          result.put("firstName",user.getfirstName());
+        result.put("lastName",user.getlastName());
+        result.put("images",user.getImages());
+        result.put("isBusiness",user.getBusiness());
+
+        if (user.getBusiness())
+        {
+            result.put("add",user.getAddress());
+            result.put("gelNail",user.getGelNail());
+            result.put("laserHair",user.getLaserHair());
+         */
 
         return user;
     }

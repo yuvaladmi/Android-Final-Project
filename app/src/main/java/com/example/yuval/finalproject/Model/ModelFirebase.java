@@ -124,8 +124,16 @@ public class ModelFirebase {
         result.put("firstName",user.getfirstName());
         result.put("lastName",user.getlastName());
         result.put("images",user.getImages());
+        result.put("isBusiness",user.getBusiness());
 
-        DatabaseReference myRef = database.getReference("users").child(user.getUserId());
+        if (user.getBusiness())
+        {
+            result.put("add",user.getAddress());
+            result.put("gelNail",user.getGelNail());
+            result.put("laserHair",user.getLaserHair());
+
+        }
+         DatabaseReference myRef = database.getReference("users").child(user.getUserId());
         myRef.setValue(result);
 
         viewlistener.hideProgressBar();
@@ -310,8 +318,25 @@ public class ModelFirebase {
 
     public void updateUser(BusinessUser user){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("users");
-        myRef.child(user.getUserId()).setValue(user);
+//        DatabaseReference myRef = database.getReference("users");
+//        myRef.child(user.getUserId()).setValue(user);
+
+
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("firstName",user.getfirstName());
+        result.put("lastName",user.getlastName());
+        result.put("images",user.getImages());
+        result.put("isBusiness",user.getBusiness());
+
+        if (user.getBusiness())
+        {
+            result.put("add",user.getAddress());
+            result.put("gelNail",user.getGelNail());
+            result.put("laserHair",user.getLaserHair());
+
+        }
+        DatabaseReference myRef = database.getReference("users").child(user.getUserId());
+        myRef.setValue(result);
     }
 
     public String getConnectedUserID(){

@@ -2,9 +2,12 @@ package com.example.yuval.finalproject;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.yuval.finalproject.Model.BusinessUser;
@@ -24,7 +28,7 @@ public class BusinessDetailsFragment extends Fragment {
 
     private String userId;
     BusinessUser user;
-
+    ImageView imageView;
     private OnFragmentInteractionListener mListener;
 
 
@@ -65,51 +69,47 @@ public class BusinessDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-            getActivity().setTitle("Business Details");
-            final View contentView = inflater.inflate(R.layout.fragment_business_details, container, false);
-            this.user = Model.instance.getOneUser(userId);/*, new ModelFirebase.GetUserCallback() {
-                @Override
-                public void onComplete(BusinessUser user) {
-                    BusinessDetailsFragment.this.user = user;
-                    TextView nameEt = (TextView) contentView.findViewById(R.id.mainNameTv);
-                    TextView idEt= (TextView) contentView.findViewById(R.id.mainIdTv);
-                    TextView addressEt= (TextView) contentView.findViewById(R.id.detailsAddressTv);
-                    TextView phoneEt= (TextView) contentView.findViewById(R.id.detailsPhoneTv);
-                    // TextView timeEt= (TextView) contentView.findViewById(R.id.detail_input_time1);
-                    //TextView dateEt= (TextView) contentView.findViewById(R.id.detail_input_date);
-                    //CheckBox cb = (CheckBox) contentView.findViewById(R.id.detail_check_box);
-                    nameEt.setText(user.getfirstName());
-                    idEt.setText(user.getUserId());
-                    addressEt.setText(user.getAddress());
-                    Log.d("TAG", "got student name: " + user.getfirstName());
-                }
+        getActivity().setTitle("Business Details");
+        final View contentView = inflater.inflate(R.layout.fragment_business_details, container, false);
+        this.user = Model.instance.getOneUser(userId);
 
-                @Override
-                public void onCancel() {
-                    Log.d("TAG", "get student cancell");
+        imageView = (ImageView) contentView.findViewById(R.id.strow_image);
+        if (user.getImageBitMap()!=null){
+            imageView.setImageBitmap(BitmapFactory.decodeByteArray(user.getImageBitMap(), 0, user.getImageBitMap().length));
+        }
 
-                }
-            });*/
-            TextView nameEt = (TextView) contentView.findViewById(R.id.mainNameTv);
-            TextView idEt= (TextView) contentView.findViewById(R.id.mainIdTv);
-            TextView addressEt= (TextView) contentView.findViewById(R.id.detailsAddressTv);
-            TextView phoneEt= (TextView) contentView.findViewById(R.id.detailsPhoneTv);
-            // TextView timeEt= (TextView) contentView.findViewById(R.id.detail_input_time1);
-            //TextView dateEt= (TextView) contentView.findViewById(R.id.detail_input_date);
-            //CheckBox cb = (CheckBox) contentView.findViewById(R.id.detail_check_box);
-            nameEt.setText(user.getfirstName());
-            idEt.setText(user.getUserId());
-            addressEt.setText(user.getAddress());
-            Log.d("TAG", "got student name: " + user.getfirstName());
-            return contentView;
-        /*phoneEt.setText(user.getPhone());
-        if(user.getTime() != null)
-            timeEt.setText(user.getTime().getText());
-        if(user.getDate() != null)
-            dateEt.setText(user.getDate().getText());
-        cb.setChecked(user.getChecked());
-        cb.setEnabled(false);*/
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Model.instance.getImage(user.getImages(), new Model.GetImageListener() {
+                    @Override
+                    public void onSuccess(Bitmap image) {
+                        String tagUrl = imageView.getTag().toString();
+                        if (tagUrl.equals(user.getImages())) {
+                            imageView.setImageBitmap(image);
+                           // progressBar.setVisibility(View.GONE);
+                        }
+                    }
 
+                    @Override
+                    public void onFail() {
+                       // progressBar.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
+        TextView nameEt = (TextView) contentView.findViewById(R.id.mainNameTv);
+        TextView idEt= (TextView) contentView.findViewById(R.id.mainIdTv);
+        TextView addressEt= (TextView) contentView.findViewById(R.id.detailsAddressTv);
+        TextView phoneEt= (TextView) contentView.findViewById(R.id.detailsPhoneTv);
+        // TextView timeEt= (TextView) contentView.findViewById(R.id.detail_input_time1);
+        //TextView dateEt= (TextView) contentView.findViewById(R.id.detail_input_date);
+        //CheckBox cb = (CheckBox) contentView.findViewById(R.id.detail_check_box);
+        nameEt.setText(user.getfirstName());
+        idEt.setText(user.getUserId());
+        addressEt.setText(user.getAddress());
+        Log.d("TAG", "got student name: " + user.getfirstName());
+        return contentView;
     }
 
     @Override

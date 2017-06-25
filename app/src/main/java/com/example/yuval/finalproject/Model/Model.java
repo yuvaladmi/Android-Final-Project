@@ -76,9 +76,6 @@ public class Model {
     }
 
 
-    public void deleteStudent(BusinessUser user) {
-        BusinessUserSQL.deleteUser(modelSql.getReadableDatabase(),user);
-    }
 
     public interface LoginListener{
         /**

@@ -2,6 +2,7 @@ package com.example.yuval.finalproject;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ public class BusinessListFragment extends Fragment {
     BusinessListAdapter businessListAdapter;
     private OnFragmentInteractionListener mListener;
     private MyProgressBar progressBar;
+    ImageView imageView;
 
 
 
@@ -65,6 +67,8 @@ public class BusinessListFragment extends Fragment {
         businessListAdapter = new BusinessListAdapter();
 
         list.setAdapter(businessListAdapter);
+
+        imageView = (ImageView) contentView.findViewById(R.id.mainImageView);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -159,6 +163,11 @@ public class BusinessListFragment extends Fragment {
             BusinessUser UserInPosition = (BusinessUser) data.get(position);
             name.setText(UserInPosition.getfirstName());
             id.setText(UserInPosition.getUserId());
+
+
+            if (UserInPosition.getImageBitMap()!=null){
+                imageView.setImageBitmap(BitmapFactory.decodeByteArray(UserInPosition.getImageBitMap(), 0, UserInPosition.getImageBitMap().length));
+            }
 
             return convertView;
         }

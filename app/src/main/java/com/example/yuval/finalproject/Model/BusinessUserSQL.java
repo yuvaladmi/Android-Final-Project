@@ -16,6 +16,7 @@ public class BusinessUserSQL {
     static final String USER_ID = "userId";
     static final String USER_NAME = "name";
     static final String USER_IMAGE_URL = "imageUrl";
+    static final String USER_IMAGE_BITMAP = "imageBitMap";
 
     static List<BusinessUser> getAllStudents(SQLiteDatabase db) {
         Cursor cursor = db.query(USER_TABLE, null, null, null, null, null, null);
@@ -24,12 +25,14 @@ public class BusinessUserSQL {
             int idIndex = cursor.getColumnIndex(USER_ID);
             int nameIndex = cursor.getColumnIndex(USER_NAME);
             int imageUrlIndex = cursor.getColumnIndex(USER_IMAGE_URL);
+            int imageBitMapIndex = cursor.getColumnIndex(USER_IMAGE_BITMAP);
 
             do {
                 BusinessUser user = new BusinessUser();
                 user.setUserId( cursor.getString(idIndex));
                 user.setfirstName(cursor.getString(nameIndex));
                 user.setImages(cursor.getString(imageUrlIndex));
+                user.setImageBitMap(cursor.getBlob(imageBitMapIndex));
                 list.add(user);
             } while (cursor.moveToNext());
         }
@@ -41,6 +44,8 @@ public class BusinessUserSQL {
         values.put(USER_ID, user.getUserId());
         values.put(USER_NAME, user.getfirstName());
         values.put(USER_IMAGE_URL, user.getImages());
+        if(user.getImageBitMap() != null)
+            values.put(USER_IMAGE_BITMAP, user.getImageBitMap().toString());
         db.insert(USER_TABLE, USER_ID, values);
     }
 
@@ -53,21 +58,16 @@ public class BusinessUserSQL {
             int idIndex = cursor.getColumnIndex(USER_ID);
             int nameIndex = cursor.getColumnIndex(USER_NAME);
             int imageUrlIndex = cursor.getColumnIndex(USER_IMAGE_URL);
+            int imageBitMapIndex = cursor.getColumnIndex(USER_IMAGE_BITMAP);
 
             BusinessUser user = new BusinessUser();
             user.setUserId( cursor.getString(idIndex));
             user.setfirstName(cursor.getString(nameIndex));
             user.setImages(cursor.getString(imageUrlIndex));
-
+            user.setImageBitMap(cursor.getBlob(imageBitMapIndex));
             return user;
         }
         return null;
-    }
-    static void deleteUser(SQLiteDatabase db,BusinessUser user) {
-        String[] whereArgs = new String[] {
-                user.getUserId()
-        };
-        db.delete(USER_TABLE,USER_ID+"=?",whereArgs);
     }
 
     public static void addUsersToDB(SQLiteDatabase db, List<BusinessUser> userList){
@@ -80,7 +80,8 @@ public class BusinessUserSQL {
         values.put(USER_ID, user.getUserId());
         values.put(USER_NAME, user.getfirstName());
         values.put(USER_IMAGE_URL, user.getImages());
-
+        if(user.getImageBitMap() != null)
+            values.put(USER_IMAGE_BITMAP, user.getImageBitMap());
         String[] whereArgs = new String[] {
                 user.getUserId()
         };
@@ -92,6 +93,7 @@ public class BusinessUserSQL {
                 " (" +
                 USER_ID + " TEXT PRIMARY KEY, " +
                 USER_NAME + " TEXT, " +
+                USER_IMAGE_BITMAP + " BLOB, " +
                 USER_IMAGE_URL + " TEXT);");
     }
 
