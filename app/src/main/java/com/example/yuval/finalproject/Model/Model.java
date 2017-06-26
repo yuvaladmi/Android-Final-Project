@@ -3,8 +3,10 @@ package com.example.yuval.finalproject.Model;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.webkit.URLUtil;
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -38,7 +40,10 @@ public class Model {
             @Override
             public void onComplete(List<BusinessUser> userList) {
                 listener.onComplete(userList);
-                BusinessUserSQL.addUsersToDB(modelSql.getWritableDatabase(),userList);
+                for(BusinessUser user : userList){
+                    if(!BusinessUserSQL.CheckIsDataAlreadyInDBorNot(modelSql.getReadableDatabase(), user.getUserId()))
+                        BusinessUserSQL.addUser(modelSql.getWritableDatabase(),user);
+                }
             }
 
             @Override
@@ -55,24 +60,8 @@ public class Model {
 
     }
 
-    public boolean addNewBusinessUser(BusinessUser newUser){
-        BusinessUserSQL.addUser(modelSql.getWritableDatabase(),newUser);
-        return true;
-    }
-
     public BusinessUser getOneUser(String uid){//, final ModelFirebase.GetUserCallback callback) {
         return BusinessUserSQL.getUser(modelSql.getReadableDatabase(),uid);
-        /*modelFirebase.getOneUser(uid, new ModelFirebase.GetUserCallback() {
-            @Override
-            public void onComplete(BusinessUser user) {
-                callback.onComplete(user);
-            }
-
-            @Override
-            public void onCancel() {
-                callback.onCancel();
-            }
-        });*/
     }
 
 
@@ -245,7 +234,7 @@ public class Model {
         void onSuccess(Bitmap image);
         void onFail();
     }
-    public void getImage(final String url, final GetImageListener listener) {
+    public void getImage(final String url,final GetImageListener listener) {
         //check if image exsist localy
         final String fileName = URLUtil.guessFileName(url, null, null);
         ModelFiles.loadImageFromFileAsynch(fileName, new ModelFiles.LoadImageFromFileAsynch() {
@@ -274,7 +263,14 @@ public class Model {
                 }
             }
         });
+    }
 
+    public void downloadPicture(byte[] imgArray, String imgName){
+        Bitmap image = BitmapFactory.decodeByteArray(imgArray,0,imgArray.length);
+        saveImageToFile(image,imgName);
+    }
+    public void downloadPicture(Bitmap imgArray, String imgName){
+        saveImageToFile(imgArray,imgName);
     }
 
 }

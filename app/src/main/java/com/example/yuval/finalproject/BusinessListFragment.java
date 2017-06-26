@@ -2,6 +2,7 @@ package com.example.yuval.finalproject;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
@@ -159,15 +160,41 @@ public class BusinessListFragment extends Fragment {
             }
             TextView name = (TextView) convertView.findViewById(R.id.strow_name);
             TextView id = (TextView) convertView.findViewById(R.id.strow_id);
+            imageView = (ImageView) convertView.findViewById(R.id.strow_image);
 
-            BusinessUser UserInPosition = (BusinessUser) data.get(position);
-            name.setText(UserInPosition.getfirstName());
-            id.setText(UserInPosition.getUserId());
+            final BusinessUser userInPosition = (BusinessUser) data.get(position);
+            name.setText(userInPosition.getfirstName());
+            id.setText(userInPosition.getUserId());
 
+            imageView.setTag(userInPosition.getImages());
 
-            if (UserInPosition.getImageBitMap()!=null){
-                imageView.setImageBitmap(BitmapFactory.decodeByteArray(UserInPosition.getImageBitMap(), 0, UserInPosition.getImageBitMap().length));
+            if (userInPosition.getImages() != null && !userInPosition.getImages().isEmpty() && !userInPosition.getImages().equals("")) {
+                Log.d("TAG", "user has image "+userInPosition.getImages() );
+                Model.instance.getImage(userInPosition.getImages(), new Model.GetImageListener() {
+                    @Override
+                    public void onSuccess(final Bitmap image) {
+                        String tagUrl = imageView.getTag().toString();
+                        Log.d("TAG", "user has image "+tagUrl);
+                        if (tagUrl.equals(userInPosition.getImages())) {
+                            imageView.setImageBitmap(image);
+                            imageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Log.d("TAG", "IMG PRESS");
+                                    Model.instance.downloadPicture(image, userInPosition.getfirstName()+".jpeg");
+                                }
+                            });
+                            //progressBar.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onFail() {
+                        // progressBar.setVisibility(View.GONE);
+                    }
+                });
             }
+
 
             return convertView;
         }

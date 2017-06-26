@@ -279,8 +279,10 @@ public class ModelFirebase {
                 List<BusinessUser> list = new LinkedList<BusinessUser>();
                 for(DataSnapshot snap : dataSnapshot.getChildren()){
                     BusinessUser user = snap.getValue(BusinessUser.class);
-                    user.setUserId(snap.getKey());
-                    list.add(user);
+                    if((Boolean)snap.child("isBusiness").getValue()){
+                        user.setUserId(snap.getKey());
+                        list.add(user);
+                    }
                 }
                 callback.onComplete(list);
             }
@@ -326,7 +328,7 @@ public class ModelFirebase {
         result.put("firstName",user.getfirstName());
         result.put("lastName",user.getlastName());
         result.put("images",user.getImages());
-        result.put("imageBitMap",user.getImageBitMap());
+        //result.put("imageBitMap",user.getImageBitMap());
         result.put("isBusiness",user.getBusiness());
 
         if (user.getBusiness())

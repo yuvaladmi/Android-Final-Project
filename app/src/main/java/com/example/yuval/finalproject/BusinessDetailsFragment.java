@@ -60,8 +60,6 @@ public class BusinessDetailsFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit, menu);
-        MenuItem menuItem = menu.findItem(R.id.main_add);
-        menuItem.setVisible(false);
         MenuItem editMenuItem = menu.findItem(R.id.main_edit);
         if(user.getUserId().equals(Model.instance.getConnectedUserID()) )
             editMenuItem.setVisible(true);
@@ -86,7 +84,7 @@ public class BusinessDetailsFragment extends Fragment {
         final View contentView = inflater.inflate(R.layout.fragment_business_details, container, false);
         this.user = Model.instance.getOneUser(userId);
 
-        imageView = (ImageView) contentView.findViewById(R.id.strow_image);
+        imageView = (ImageView) contentView.findViewById(R.id.mainImageView);
         final EditText nameEt = (EditText) contentView.findViewById(R.id.fragment_register_fName_editText);
         final EditText nameLEt = (EditText) contentView.findViewById(R.id.fragment_register_lName_editText);
 
@@ -142,29 +140,36 @@ public class BusinessDetailsFragment extends Fragment {
         });
 
         if (user.getImageBitMap()!=null){
-            imageView.setImageBitmap(BitmapFactory.decodeByteArray(user.getImageBitMap(), 0, user.getImageBitMap().length));
+            //imageView.setImageBitmap(BitmapFactory.decodeByteArray(user.getImageBitMap(), 0, user.getImageBitMap().length));
         }
+        imageView.setTag(user.getImages());
 
-//        imageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Model.instance.getImage(user.getImages(), new Model.GetImageListener() {
-//                    @Override
-//                    public void onSuccess(Bitmap image) {
-//                        String tagUrl = imageView.getTag().toString();
-//                        if (tagUrl.equals(user.getImages())) {
-//                            imageView.setImageBitmap(image);
-//                           // progressBar.setVisibility(View.GONE);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFail() {
-//                       // progressBar.setVisibility(View.GONE);
-//                    }
-//                });
-//            }
-//        });
+        if (user.getImages() != null && !user.getImages().isEmpty() && !user.getImages().equals("")) {
+            Log.d("TAG", "user has image "+user.getImages() );
+            Model.instance.getImage(user.getImages(), new Model.GetImageListener() {
+                @Override
+                public void onSuccess(Bitmap image) {
+                    String tagUrl = imageView.getTag().toString();
+                    Log.d("TAG", "user has image "+tagUrl);
+                    if (tagUrl.equals(user.getImages())) {
+                        imageView.setImageBitmap(image);
+                        //progressBar.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onFail() {
+                    // progressBar.setVisibility(View.GONE);
+                }
+            });
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Model.instance.downloadPicture(user.getImageBitMap(), user.getfirstName()+".jpeg");
+                }
+            });
+        }
 
 
 

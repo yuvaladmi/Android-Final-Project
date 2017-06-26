@@ -113,11 +113,16 @@ public class BusinessUserSQL {
         return null;
     }
 
-    public static void addUsersToDB(SQLiteDatabase db, List<BusinessUser> userList){
-        for(BusinessUser user : userList)
-            addUser(db, user);
+    public static boolean CheckIsDataAlreadyInDBorNot(SQLiteDatabase db, String fieldValue) {
+        String Query = "Select "+USER_ID+" from " + USER_TABLE + " where " + USER_ID + " = ?";
+        Cursor cursor = db.rawQuery(Query, new String[]{fieldValue});
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
     }
-
     public static void updateUser(SQLiteDatabase db,BusinessUser user){
         ContentValues values = new ContentValues();
         values.put(USER_ID, user.getUserId());
@@ -152,9 +157,9 @@ public class BusinessUserSQL {
                 USER_ID + " TEXT PRIMARY KEY, " +
                 USER_NAME + " TEXT, " +
                 USER_IMAGE_BITMAP + " BLOB, " +
-                USER_IS_BUSINESS +"INTEGER,"+
-                USER_GEL_NAIL +"INTEGER,"+
-                USER_LASER_HAIR +"INTEGER,"+
+                USER_IS_BUSINESS +" INTEGER, "+
+                USER_GEL_NAIL +" INTEGER, "+
+                USER_LASER_HAIR +" INTEGER, "+
                 USER_IMAGE_URL + " TEXT);");
     }
 

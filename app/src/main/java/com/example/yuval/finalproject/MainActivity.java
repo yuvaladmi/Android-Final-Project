@@ -126,7 +126,6 @@ public class MainActivity extends Activity
                 ftr = getFragmentManager().beginTransaction();
                 //add to the screen
                 ftr.replace(R.id.main_container,businessListFragment);
-
                 ftr.addToBackStack("");
                 ftr.commit();
             }
@@ -140,10 +139,8 @@ public class MainActivity extends Activity
             @Override
             public void onSignInPressed() {
                 ftr = getFragmentManager().beginTransaction();
-
                 //add to the screen
                 ftr.replace(R.id.main_container,signInFragment);
-
                 ftr.addToBackStack("");
                 ftr.commit();
             }
@@ -151,10 +148,8 @@ public class MainActivity extends Activity
             @Override
             public void onRegisterPressed() {
                 ftr = getFragmentManager().beginTransaction();
-
                 //add to the screen
                 ftr.replace(R.id.main_container,registerFragment);
-
                 ftr.addToBackStack("");
                 ftr.commit();
             }
@@ -200,7 +195,6 @@ public class MainActivity extends Activity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.main,menu);
         return true;
     }
 
@@ -242,13 +236,9 @@ public class MainActivity extends Activity
     }
 
     @Override
-    public void onDeleteSelected() {
-        Log.d("TAG","onDeleteSelected");
-        BusinessListFragment itemListFragment = BusinessListFragment.newInstance();
-        FragmentTransaction tran = getFragmentManager().beginTransaction();
-        tran.replace(R.id.main_container, itemListFragment);
-        tran.addToBackStack("");
-        tran.commit();
+    public void onCancelSelected() {
+        Log.d("TAG","onCancelSelected");
+        getFragmentManager().popBackStack();
        // getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

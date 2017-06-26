@@ -12,10 +12,17 @@ public class BusinessUser extends ClientUser {
     private String treatments;
     private String images;
     private byte[] imageBitMap;
-    private Boolean isBusiness;
+    private Boolean business;
     private Boolean GelNail;
     private Boolean LaserHair;
 
+    public Boolean getBusiness() {
+        return this.business;
+    }
+
+    public void setBusiness(Boolean business) {
+        this.business = business;
+    }
 
     public byte[] getImageBitMap() {
         return imageBitMap;
@@ -25,13 +32,6 @@ public class BusinessUser extends ClientUser {
         this.imageBitMap = imageBitMap;
     }
 
-    public Boolean getBusiness() {
-        return isBusiness;
-    }
-
-    public void setBusiness(Boolean business) {
-        isBusiness = business;
-    }
 
     public Boolean getGelNail() {
         return GelNail;

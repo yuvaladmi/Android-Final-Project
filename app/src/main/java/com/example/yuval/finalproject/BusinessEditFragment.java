@@ -84,8 +84,6 @@ public class BusinessEditFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.blank, menu);
-        MenuItem menuItem = menu.findItem(R.id.main_add);
-        menuItem.setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -105,7 +103,7 @@ public class BusinessEditFragment extends Fragment {
         nameLEt.setText(user.getlastName());
         addreddEt.setText(user.getAddress());
         isBus= (CheckBox)contentView.findViewById(R.id.fragment_register_isBusiness);
-        isBus.setChecked(true);
+        isBus.setEnabled(false);
         tablebus= (TableLayout) contentView.findViewById(R.id.fragment_register_table_bus);
 
         leser= (CheckBox) contentView.findViewById(R.id.fragment_register_Laser_hair_removal);
@@ -224,7 +222,7 @@ public class BusinessEditFragment extends Fragment {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v){
-
+                mListener.onCancelSelected();
             }
         });
 
@@ -269,7 +267,7 @@ public class BusinessEditFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onSaveSelected();
-        void onDeleteSelected();
+        void onCancelSelected();
     }
 
 
