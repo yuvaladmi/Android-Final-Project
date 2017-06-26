@@ -326,6 +326,7 @@ public class ModelFirebase {
         result.put("firstName",user.getfirstName());
         result.put("lastName",user.getlastName());
         result.put("images",user.getImages());
+        result.put("imageBitMap",user.getImageBitMap());
         result.put("isBusiness",user.getBusiness());
 
         if (user.getBusiness())

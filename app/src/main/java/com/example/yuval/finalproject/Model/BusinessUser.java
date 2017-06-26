@@ -14,6 +14,7 @@ public class BusinessUser extends ClientUser {
     private byte[] imageBitMap;
     private Boolean isBusiness;
     private Boolean GelNail;
+    private Boolean LaserHair;
 
 
     public byte[] getImageBitMap() {
@@ -48,7 +49,7 @@ public class BusinessUser extends ClientUser {
         LaserHair = laserHair;
     }
 
-    private Boolean LaserHair;
+
 
     public BusinessUser() {
     }

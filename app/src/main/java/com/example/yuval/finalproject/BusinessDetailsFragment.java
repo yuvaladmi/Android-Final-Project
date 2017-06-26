@@ -15,7 +15,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.example.yuval.finalproject.Model.BusinessUser;
@@ -28,9 +31,19 @@ public class BusinessDetailsFragment extends Fragment {
 
     private String userId;
     BusinessUser user;
-    ImageView imageView;
-    private OnFragmentInteractionListener mListener;
 
+    private OnFragmentInteractionListener mListener;
+    Bitmap imageBitmap;
+    ProgressBar progressBar;
+    ImageView imageView;
+
+    TableLayout tablebus;
+    Boolean flage=true;
+    Boolean flageNail=false;
+    Boolean flageLeser=false;
+    CheckBox isBus;
+    CheckBox leser;
+    CheckBox nail;
 
 
     public BusinessDetailsFragment() {
@@ -74,40 +87,87 @@ public class BusinessDetailsFragment extends Fragment {
         this.user = Model.instance.getOneUser(userId);
 
         imageView = (ImageView) contentView.findViewById(R.id.strow_image);
+        final EditText nameEt = (EditText) contentView.findViewById(R.id.fragment_register_fName_editText);
+        final EditText nameLEt = (EditText) contentView.findViewById(R.id.fragment_register_lName_editText);
+
+        final EditText addreddEt = (EditText) contentView.findViewById(R.id.fragment_register_address_editText);
+        nameEt.setText(this.user.getfirstName());
+        nameLEt.setText(this.user.getlastName());
+        addreddEt.setText(this.user.getAddress());
+        isBus= (CheckBox)contentView.findViewById(R.id.fragment_register_isBusiness);
+        isBus.setChecked(true);
+        tablebus= (TableLayout) contentView.findViewById(R.id.fragment_register_table_bus);
+        leser= (CheckBox) contentView.findViewById(R.id.fragment_register_Laser_hair_removal);
+        nail=(CheckBox) contentView.findViewById(R.id.fragment_register_Gel_nail_polish);
+
+
+        isBus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flage=!flage;
+
+                if (flage){
+
+                    tablebus.setVisibility(View.GONE);
+                }
+                else {
+
+                    tablebus.setVisibility(View.VISIBLE);
+                }
+
+
+            }
+        });
+
+        if (this.user.getLaserHair()){
+            leser.setChecked(true);
+        }
+        if (this.user.getGelNail()){
+            nail.setChecked(true);
+        }
+
+
+        leser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flageLeser=!flageLeser;
+            }
+        });
+
+        nail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flageNail=!flageNail;
+            }
+        });
+
         if (user.getImageBitMap()!=null){
             imageView.setImageBitmap(BitmapFactory.decodeByteArray(user.getImageBitMap(), 0, user.getImageBitMap().length));
         }
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Model.instance.getImage(user.getImages(), new Model.GetImageListener() {
-                    @Override
-                    public void onSuccess(Bitmap image) {
-                        String tagUrl = imageView.getTag().toString();
-                        if (tagUrl.equals(user.getImages())) {
-                            imageView.setImageBitmap(image);
-                           // progressBar.setVisibility(View.GONE);
-                        }
-                    }
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Model.instance.getImage(user.getImages(), new Model.GetImageListener() {
+//                    @Override
+//                    public void onSuccess(Bitmap image) {
+//                        String tagUrl = imageView.getTag().toString();
+//                        if (tagUrl.equals(user.getImages())) {
+//                            imageView.setImageBitmap(image);
+//                           // progressBar.setVisibility(View.GONE);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFail() {
+//                       // progressBar.setVisibility(View.GONE);
+//                    }
+//                });
+//            }
+//        });
 
-                    @Override
-                    public void onFail() {
-                       // progressBar.setVisibility(View.GONE);
-                    }
-                });
-            }
-        });
-        TextView nameEt = (TextView) contentView.findViewById(R.id.mainNameTv);
-        TextView idEt= (TextView) contentView.findViewById(R.id.mainIdTv);
-        TextView addressEt= (TextView) contentView.findViewById(R.id.detailsAddressTv);
-        TextView phoneEt= (TextView) contentView.findViewById(R.id.detailsPhoneTv);
-        // TextView timeEt= (TextView) contentView.findViewById(R.id.detail_input_time1);
-        //TextView dateEt= (TextView) contentView.findViewById(R.id.detail_input_date);
-        //CheckBox cb = (CheckBox) contentView.findViewById(R.id.detail_check_box);
-        nameEt.setText(user.getfirstName());
-        idEt.setText(user.getUserId());
-        addressEt.setText(user.getAddress());
+
+
         Log.d("TAG", "got student name: " + user.getfirstName());
         return contentView;
     }

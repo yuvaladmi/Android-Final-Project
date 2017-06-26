@@ -109,8 +109,15 @@ public class BusinessEditFragment extends Fragment {
         tablebus= (TableLayout) contentView.findViewById(R.id.fragment_register_table_bus);
 
         leser= (CheckBox) contentView.findViewById(R.id.fragment_register_Laser_hair_removal);
+        if (user.getLaserHair()){
+            leser.setChecked(true);
+            flageLeser=true;
+        }
         nail=(CheckBox) contentView.findViewById(R.id.fragment_register_Gel_nail_polish);
-
+        if (user.getGelNail()){
+            nail.setChecked(true);
+            flageNail=true;
+        }
 
         isBus.setOnClickListener(new View.OnClickListener() {
             @Override
