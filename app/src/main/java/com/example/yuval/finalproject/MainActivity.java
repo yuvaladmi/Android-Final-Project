@@ -133,6 +133,18 @@ public class MainActivity extends Activity
 
         };
 
+        businessListFragment.setDelegate(new BusinessListFragment.Delegate() {
+            @Override
+            public void showProgressBar() {
+                progressBar.showProgressDialog();
+            }
+
+            @Override
+            public void hideProgressBar() {
+                progressBar.hideProgressDialog();
+            }
+        });
+
         Model.instance().checkIfUserAuthonticated(loginListener);
 
         mainFragment.setDelegate(new MainFragment.Delegate() {
@@ -227,9 +239,8 @@ public class MainActivity extends Activity
     @Override
     public void onSaveSelected() {
         Log.d("TAG","onSaveSelected");
-        BusinessListFragment itemListFragment = BusinessListFragment.newInstance();
         FragmentTransaction tran = getFragmentManager().beginTransaction();
-        tran.replace(R.id.main_container, itemListFragment);
+        tran.replace(R.id.main_container, businessListFragment);
         tran.addToBackStack("");
         tran.commit();
        // getActionBar().setDisplayHomeAsUpEnabled(true);

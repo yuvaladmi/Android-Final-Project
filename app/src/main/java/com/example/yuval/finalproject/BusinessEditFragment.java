@@ -1,10 +1,13 @@
 package com.example.yuval.finalproject;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yuval.finalproject.Dialogs.MyProgressBar;
@@ -97,8 +101,9 @@ public class BusinessEditFragment extends Fragment {
         final EditText nameLEt = (EditText) contentView.findViewById(R.id.fragment_register_lName_editText);
 
         final EditText addreddEt = (EditText) contentView.findViewById(R.id.fragment_register_address_editText);
+        TextView Treatments = (TextView) contentView.findViewById(R.id.fragment_edit_Treat);
+        Treatments.setPaintFlags(Treatments.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        //EditText phoneEt = (EditText) contentView.findViewById(R.id.editPhoneTv);
         nameEt.setText(user.getfirstName());
         nameLEt.setText(user.getlastName());
         addreddEt.setText(user.getAddress());
@@ -170,16 +175,43 @@ public class BusinessEditFragment extends Fragment {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("TAG", "st.getId()==" + user.getUserId());
-                if (imageBitmap != null) {
-                    Model.instance.saveImage(imageBitmap, user.getUserId() + ".jpeg", new Model.SaveImageListener() {
-                        @Override
-                        public void complete(String url) {
-                            user.setImages(url);
-                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                            byte[] img = bos.toByteArray();
-                            user.setImageBitMap(img);
+
+                AlertDialog.Builder a_bu=new AlertDialog.Builder(getActivity());
+                a_bu.setCancelable(false);
+                a_bu.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                          Log.d("TAG", "st.getId()==" + user.getUserId());
+                        if (imageBitmap != null) {
+                            Model.instance.saveImage(imageBitmap, user.getUserId() + ".jpeg", new Model.SaveImageListener() {
+                                @Override
+                                public void complete(String url) {
+                                    user.setImages(url);
+                                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                                    byte[] img = bos.toByteArray();
+                                    user.setImageBitMap(img);
+                                    user.setfirstName(nameEt.getText().toString());
+                                    user.setBusiness(flage);
+
+                                    if (flage)
+                                    {
+                                        user.setAddress(addreddEt.getText().toString());
+                                        user.setGelNail(flageNail);
+                                        user.setLaserHair(flageLeser);
+                                    }
+
+                                    Model.instance.updateUser(user);
+                                    mListener.onSaveSelected();
+                                    // progressBar.setVisibility(GONE);
+                                }
+
+                                @Override
+                                public void fail() {
+                                    //notify operation fail,...
+                                }
+                            });
+                        }else{
                             user.setfirstName(nameEt.getText().toString());
                             user.setBusiness(flage);
 
@@ -192,28 +224,21 @@ public class BusinessEditFragment extends Fragment {
 
                             Model.instance.updateUser(user);
                             mListener.onSaveSelected();
-                            // progressBar.setVisibility(GONE);
                         }
 
-                        @Override
-                        public void fail() {
-                            //notify operation fail,...
-                        }
-                    });
-                }else{
-                    user.setfirstName(nameEt.getText().toString());
-                    user.setBusiness(flage);
-
-                    if (flage)
-                    {
-                        user.setAddress(addreddEt.getText().toString());
-                        user.setGelNail(flageNail);
-                        user.setLaserHair(flageLeser);
                     }
+                });
+                a_bu.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        getFragmentManager().popBackStack();
+                    }
+                });
+                AlertDialog alert=a_bu.create();
+                alert.setTitle("Do you want to edit the user ?");
+                alert.show();
 
-                    Model.instance.updateUser(user);
-                    mListener.onSaveSelected();
-                }
 
             }
         });

@@ -14,7 +14,9 @@ import java.util.List;
 public class BusinessUserSQL {
     static final String USER_TABLE = "users";
     static final String USER_ID = "userId";
-    static final String USER_NAME = "name";
+    static final String USER_FNAME = "firstName";
+    static final String USER_LNAME = "lastName";
+    static final String USER_ADDRESS = "Address";
     static final String USER_IMAGE_URL = "imageUrl";
     static final String USER_IMAGE_BITMAP = "imageBitMap";
     static final String USER_IS_BUSINESS = "isBusiness";
@@ -26,7 +28,9 @@ public class BusinessUserSQL {
         List<BusinessUser> list = new LinkedList<BusinessUser>();
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(USER_ID);
-            int nameIndex = cursor.getColumnIndex(USER_NAME);
+            int fnameIndex = cursor.getColumnIndex(USER_FNAME);
+            int lnameIndex = cursor.getColumnIndex(USER_LNAME);
+            int AddressIndex = cursor.getColumnIndex(USER_ADDRESS);
             int imageUrlIndex = cursor.getColumnIndex(USER_IMAGE_URL);
             int imageBitMapIndex = cursor.getColumnIndex(USER_IMAGE_BITMAP);
             int isBusinessIndex=cursor.getColumnIndex(USER_IS_BUSINESS);
@@ -36,7 +40,9 @@ public class BusinessUserSQL {
             do {
                 BusinessUser user = new BusinessUser();
                 user.setUserId( cursor.getString(idIndex));
-                user.setfirstName(cursor.getString(nameIndex));
+                user.setfirstName(cursor.getString(fnameIndex));
+                user.setlastName(cursor.getString(lnameIndex));
+                user.setAddress(cursor.getString(AddressIndex));
                 user.setImages(cursor.getString(imageUrlIndex));
                 user.setImageBitMap(cursor.getBlob(imageBitMapIndex));
                 if(cursor.getInt(isBusinessIndex)==1)
@@ -63,7 +69,9 @@ public class BusinessUserSQL {
     static void addUser(SQLiteDatabase db, BusinessUser user) {
         ContentValues values = new ContentValues();
         values.put(USER_ID, user.getUserId());
-        values.put(USER_NAME, user.getfirstName());
+        values.put(USER_FNAME, user.getfirstName());
+        values.put(USER_LNAME, user.getlastName());
+        values.put(USER_ADDRESS,user.getAddress());
         values.put(USER_IMAGE_URL, user.getImages());
         values.put(USER_IS_BUSINESS,user.getBusiness());
         values.put(USER_GEL_NAIL,user.getGelNail());
@@ -80,7 +88,9 @@ public class BusinessUserSQL {
         Cursor cursor = db.query(USER_TABLE, null,USER_ID+"=?",whereArgs,null,null,null,"1");
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(USER_ID);
-            int nameIndex = cursor.getColumnIndex(USER_NAME);
+            int fnameIndex = cursor.getColumnIndex(USER_FNAME);
+            int lnameIndex = cursor.getColumnIndex(USER_LNAME);
+            int AddressIndex = cursor.getColumnIndex(USER_ADDRESS);
             int imageUrlIndex = cursor.getColumnIndex(USER_IMAGE_URL);
             int imageBitMapIndex = cursor.getColumnIndex(USER_IMAGE_BITMAP);
 
@@ -90,7 +100,9 @@ public class BusinessUserSQL {
 
             BusinessUser user = new BusinessUser();
             user.setUserId( cursor.getString(idIndex));
-            user.setfirstName(cursor.getString(nameIndex));
+            user.setfirstName(cursor.getString(fnameIndex));
+            user.setlastName(cursor.getString(lnameIndex));
+            user.setAddress(cursor.getString(AddressIndex));
             user.setImages(cursor.getString(imageUrlIndex));
             user.setImageBitMap(cursor.getBlob(imageBitMapIndex));
             if(cursor.getInt(isBusinessIndex)==1)
@@ -126,7 +138,9 @@ public class BusinessUserSQL {
     public static void updateUser(SQLiteDatabase db,BusinessUser user){
         ContentValues values = new ContentValues();
         values.put(USER_ID, user.getUserId());
-        values.put(USER_NAME, user.getfirstName());
+        values.put(USER_FNAME, user.getfirstName());
+        values.put(USER_LNAME, user.getlastName());
+        values.put(USER_ADDRESS,user.getAddress());
         values.put(USER_IMAGE_URL, user.getImages());
         if (user.getBusiness())
             values.put(USER_IS_BUSINESS,1);
@@ -155,7 +169,9 @@ public class BusinessUserSQL {
         db.execSQL("create table " + USER_TABLE +
                 " (" +
                 USER_ID + " TEXT PRIMARY KEY, " +
-                USER_NAME + " TEXT, " +
+                USER_FNAME + " TEXT, " +
+                USER_LNAME + " TEXT, " +
+                USER_ADDRESS + " TEXT, " +
                 USER_IMAGE_BITMAP + " BLOB, " +
                 USER_IS_BUSINESS +" INTEGER, "+
                 USER_GEL_NAIL +" INTEGER, "+

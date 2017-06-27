@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,10 +21,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.yuval.finalproject.Model.BusinessUser;
 import com.example.yuval.finalproject.Model.Model;
 import com.example.yuval.finalproject.Model.ModelFirebase;
+
+import java.io.ByteArrayOutputStream;
 
 
 public class BusinessDetailsFragment extends Fragment {
@@ -85,10 +89,10 @@ public class BusinessDetailsFragment extends Fragment {
         this.user = Model.instance.getOneUser(userId);
 
         imageView = (ImageView) contentView.findViewById(R.id.mainImageView);
-        final EditText nameEt = (EditText) contentView.findViewById(R.id.fragment_register_fName_editText);
-        final EditText nameLEt = (EditText) contentView.findViewById(R.id.fragment_register_lName_editText);
+        final TextView nameEt = (TextView) contentView.findViewById(R.id.fragment_register_fName_editText);
+        final TextView nameLEt = (TextView) contentView.findViewById(R.id.fragment_register_lName_editText);
 
-        final EditText addreddEt = (EditText) contentView.findViewById(R.id.fragment_register_address_editText);
+        final TextView addreddEt = (TextView) contentView.findViewById(R.id.fragment_register_address_editText);
         nameEt.setText(this.user.getfirstName());
         nameLEt.setText(this.user.getlastName());
         addreddEt.setText(this.user.getAddress());
@@ -97,6 +101,9 @@ public class BusinessDetailsFragment extends Fragment {
         tablebus= (TableLayout) contentView.findViewById(R.id.fragment_register_table_bus);
         leser= (CheckBox) contentView.findViewById(R.id.fragment_register_Laser_hair_removal);
         nail=(CheckBox) contentView.findViewById(R.id.fragment_register_Gel_nail_polish);
+
+        TextView Treatments = (TextView) contentView.findViewById(R.id.fragment_details_Treat);
+        Treatments.setPaintFlags(Treatments.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
 
         isBus.setOnClickListener(new View.OnClickListener() {
@@ -139,9 +146,6 @@ public class BusinessDetailsFragment extends Fragment {
             }
         });
 
-        if (user.getImageBitMap()!=null){
-            //imageView.setImageBitmap(BitmapFactory.decodeByteArray(user.getImageBitMap(), 0, user.getImageBitMap().length));
-        }
         imageView.setTag(user.getImages());
 
         if (user.getImages() != null && !user.getImages().isEmpty() && !user.getImages().equals("")) {
@@ -153,6 +157,10 @@ public class BusinessDetailsFragment extends Fragment {
                     Log.d("TAG", "user has image "+tagUrl);
                     if (tagUrl.equals(user.getImages())) {
                         imageView.setImageBitmap(image);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        byte[] byteArray = stream.toByteArray();
+                        user.setImageBitMap(byteArray);
                         //progressBar.setVisibility(View.GONE);
                     }
                 }
@@ -167,6 +175,8 @@ public class BusinessDetailsFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Model.instance.downloadPicture(user.getImageBitMap(), user.getfirstName()+".jpeg");
+                    Toast.makeText(getActivity(), "Picture is saved!",
+                            Toast.LENGTH_LONG).show();
                 }
             });
         }

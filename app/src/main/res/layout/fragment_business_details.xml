@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/orr1"
     tools:context="com.example.yuval.finalproject.BusinessDetailsFragment">
 
 
@@ -20,13 +21,14 @@
             android:layout_margin="10dp"
             android:gravity="center"
             android:text="Details"
+            android:textColor="#9932CC"
             android:textSize="40dp" />
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
-                    android:src="@drawable/avatar"
+                    android:src="@drawable/avatarr"
                     android:id="@+id/mainImageView"
                     android:layout_width="100dp"
                     android:layout_height="100dp" />
@@ -60,9 +62,10 @@
                             android:text="@string/first_name_colon"
                             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
                             android:textStyle="bold" />
-                        <EditText
+                        <TextView
                             android:id="@+id/fragment_register_fName_editText"
                             android:layout_width="0dp"
+                            android:layout_marginLeft="15dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:hint="@string/hint_first_name"
@@ -81,9 +84,10 @@
                             android:text="@string/last_name_colon"
                             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
                             android:textStyle="bold" />
-                        <EditText
+                        <TextView
                             android:id="@+id/fragment_register_lName_editText"
                             android:layout_width="0dp"
+                            android:layout_marginLeft="15dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:hint="@string/hint_last_name"
@@ -106,8 +110,10 @@
                         <CheckBox
                             android:id="@+id/fragment_register_isBusiness"
                             android:layout_width="0dp"
+                            android:layout_marginLeft="15dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:enabled="false"
                             />
                     </TableRow>
                 </TableLayout>
@@ -133,14 +139,14 @@
                             android:text="Address"
                             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
                             android:textStyle="bold" />
-                        <EditText
+                        <TextView
                             android:id="@+id/fragment_register_address_editText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_marginLeft="15dp"
                             android:hint="Address"
-                            android:fontFamily="casual"
-                            android:inputType="textPassword" />
+                            android:fontFamily="casual" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/fragment_register_Treatments"
@@ -149,8 +155,10 @@
                         android:layout_margin="5dp">
 
                         <TextView
+                            android:id="@+id/fragment_details_Treat"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
                             android:fontFamily="casual"
                             android:text="Treatments :"
                             android:textStyle="bold" />
@@ -171,8 +179,10 @@
                         <CheckBox
                             android:id="@+id/fragment_register_Gel_nail_polish"
                             android:layout_width="0dp"
+                            android:layout_marginLeft="15dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:enabled="false"
                             />
                     </TableRow>
 
@@ -191,8 +201,10 @@
                         <CheckBox
                             android:id="@+id/fragment_register_Laser_hair_removal"
                             android:layout_width="0dp"
+                            android:layout_marginLeft="15dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:enabled="false"
                             />
                     </TableRow>
 

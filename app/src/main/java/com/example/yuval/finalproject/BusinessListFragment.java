@@ -42,7 +42,15 @@ public class BusinessListFragment extends Fragment {
     private MyProgressBar progressBar;
     ImageView imageView;
 
+    public interface Delegate{
+        void showProgressBar();
+        void hideProgressBar();
+    }
 
+    Delegate delegate;
+    public void setDelegate(Delegate dlg){
+        this.delegate = dlg;
+    }
 
     public BusinessListFragment() {
     }
@@ -69,6 +77,7 @@ public class BusinessListFragment extends Fragment {
 
         list.setAdapter(businessListAdapter);
 
+
         imageView = (ImageView) contentView.findViewById(R.id.mainImageView);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -85,6 +94,7 @@ public class BusinessListFragment extends Fragment {
             @Override
             public void onComplete(List<BusinessUser> list) {
                 data = list;
+                delegate.hideProgressBar();
                 businessListAdapter.notifyDataSetChanged();
             }
 
@@ -99,7 +109,6 @@ public class BusinessListFragment extends Fragment {
             }
 
         });
-
         return contentView;
     }
 
@@ -160,41 +169,10 @@ public class BusinessListFragment extends Fragment {
             }
             TextView name = (TextView) convertView.findViewById(R.id.strow_name);
             TextView id = (TextView) convertView.findViewById(R.id.strow_id);
-            imageView = (ImageView) convertView.findViewById(R.id.strow_image);
 
             final BusinessUser userInPosition = (BusinessUser) data.get(position);
-            name.setText(userInPosition.getfirstName());
+            name.setText(userInPosition.getfirstName()+" "+userInPosition.getlastName());
             id.setText(userInPosition.getUserId());
-
-            imageView.setTag(userInPosition.getImages());
-
-            if (userInPosition.getImages() != null && !userInPosition.getImages().isEmpty() && !userInPosition.getImages().equals("")) {
-                Log.d("TAG", "user has image "+userInPosition.getImages() );
-                Model.instance.getImage(userInPosition.getImages(), new Model.GetImageListener() {
-                    @Override
-                    public void onSuccess(final Bitmap image) {
-                        String tagUrl = imageView.getTag().toString();
-                        Log.d("TAG", "user has image "+tagUrl);
-                        if (tagUrl.equals(userInPosition.getImages())) {
-                            imageView.setImageBitmap(image);
-                            imageView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Log.d("TAG", "IMG PRESS");
-                                    Model.instance.downloadPicture(image, userInPosition.getfirstName()+".jpeg");
-                                }
-                            });
-                            //progressBar.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public void onFail() {
-                        // progressBar.setVisibility(View.GONE);
-                    }
-                });
-            }
-
 
             return convertView;
         }

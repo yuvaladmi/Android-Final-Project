@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/orr1"
     tools:context="com.example.yuval.finalproject.BusinessEditFragment">
 
     <ScrollView
@@ -18,13 +19,14 @@
         android:layout_margin="10dp"
         android:gravity="center"
         android:text="Edit"
+        android:textColor="#9932CC"
         android:textSize="40dp" />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:src="@drawable/avatar"
+            android:src="@drawable/avatarr"
             android:id="@+id/mainImageView"
             android:layout_width="100dp"
             android:layout_height="100dp" />
@@ -107,6 +109,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:checked="true"
+                        android:enabled="false"
                         />
                 </TableRow>
             </TableLayout>
@@ -147,9 +150,11 @@
                     android:layout_margin="5dp">
 
                     <TextView
+                        android:id="@+id/fragment_edit_Treat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="casual"
+                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
                         android:text="Treatments :"
                         android:textStyle="bold" />
                 </TableRow>
@@ -158,7 +163,8 @@
                     android:id="@+id/fragment_register_gel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp">
+                    android:layout_margin="5dp"
+                    android:layout_marginLeft="30dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -178,7 +184,8 @@
                     android:id="@+id/fragment_register_laser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp">
+                    android:layout_margin="5dp"
+                    android:layout_marginLeft="30dp">
 
                     <TextView
                         android:layout_width="wrap_content"

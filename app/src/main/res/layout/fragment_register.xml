@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/orr1"
     tools:context="com.example.yuval.finalproject.RegisterFragment">
 
     <ScrollView
@@ -19,9 +20,10 @@
                 android:fontFamily="casual"
                 android:paddingTop="5dp"
                 android:text="@string/title_fragment_register"
+                android:textColor="#9932CC"
                 android:textAlignment="center"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-                android:textSize="20sp"
+                android:textSize="40sp"
                 android:textStyle="bold|italic" />
 
             <TableLayout

@@ -128,7 +128,7 @@ public class ModelFirebase {
 
         if (user.getBusiness())
         {
-            result.put("add",user.getAddress());
+            result.put("Address",user.getAddress());
             result.put("gelNail",user.getGelNail());
             result.put("laserHair",user.getLaserHair());
 
@@ -237,13 +237,13 @@ public class ModelFirebase {
                         if (!task.isSuccessful()) {
                             listener.printToLogWarning(TAG, "signInWithEmail:failed", task.getException());
                             listener.makeToastAuthFailed();
-
+                            listener.hideProgressBar();
                         }
                         else
                         {
                             listener.goToListFragment();
                         }
-                        listener.hideProgressBar();
+
 
                         // [END_EXCLUDE]
                     }
@@ -333,7 +333,7 @@ public class ModelFirebase {
 
         if (user.getBusiness())
         {
-            result.put("add",user.getAddress());
+            result.put("Address",user.getAddress());
             result.put("gelNail",user.getGelNail());
             result.put("laserHair",user.getLaserHair());
 
