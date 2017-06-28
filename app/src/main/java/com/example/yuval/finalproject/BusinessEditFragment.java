@@ -99,7 +99,7 @@ public class BusinessEditFragment extends Fragment {
         user = Model.instance.getOneUser(userId);
         final EditText nameEt = (EditText) contentView.findViewById(R.id.fragment_register_fName_editText);
         final EditText nameLEt = (EditText) contentView.findViewById(R.id.fragment_register_lName_editText);
-
+        final EditText businessName = (EditText) contentView.findViewById(R.id.strow_businessName);
         final EditText addreddEt = (EditText) contentView.findViewById(R.id.fragment_register_address_editText);
         TextView Treatments = (TextView) contentView.findViewById(R.id.fragment_edit_Treat);
         Treatments.setPaintFlags(Treatments.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -107,6 +107,7 @@ public class BusinessEditFragment extends Fragment {
         nameEt.setText(user.getfirstName());
         nameLEt.setText(user.getlastName());
         addreddEt.setText(user.getAddress());
+        businessName.setText(user.getBusinessName());
         isBus= (CheckBox)contentView.findViewById(R.id.fragment_register_isBusiness);
         isBus.setEnabled(false);
         tablebus= (TableLayout) contentView.findViewById(R.id.fragment_register_table_bus);
@@ -218,6 +219,7 @@ public class BusinessEditFragment extends Fragment {
                             if (flage)
                             {
                                 user.setAddress(addreddEt.getText().toString());
+                                user.setBusinessName(businessName.getText().toString());
                                 user.setGelNail(flageNail);
                                 user.setLaserHair(flageLeser);
                             }

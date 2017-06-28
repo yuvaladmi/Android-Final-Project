@@ -168,11 +168,11 @@ public class BusinessListFragment extends Fragment {
                 convertView = inflater.inflate(R.layout.business_list_row, null);
             }
             TextView name = (TextView) convertView.findViewById(R.id.strow_name);
-            TextView id = (TextView) convertView.findViewById(R.id.strow_id);
+            TextView businessName = (TextView) convertView.findViewById(R.id.strow_businessName);
 
             final BusinessUser userInPosition = (BusinessUser) data.get(position);
             name.setText(userInPosition.getfirstName()+" "+userInPosition.getlastName());
-            id.setText(userInPosition.getUserId());
+            businessName.setText(userInPosition.getBusinessName());
 
             return convertView;
         }

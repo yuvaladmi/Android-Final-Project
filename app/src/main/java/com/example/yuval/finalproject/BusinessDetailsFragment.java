@@ -1,5 +1,6 @@
 package com.example.yuval.finalproject;
 
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -85,17 +86,19 @@ public class BusinessDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         getActivity().setTitle("Business Details");
+
         final View contentView = inflater.inflate(R.layout.fragment_business_details, container, false);
         this.user = Model.instance.getOneUser(userId);
 
         imageView = (ImageView) contentView.findViewById(R.id.mainImageView);
         final TextView nameEt = (TextView) contentView.findViewById(R.id.fragment_register_fName_editText);
         final TextView nameLEt = (TextView) contentView.findViewById(R.id.fragment_register_lName_editText);
-
+        final TextView businessName=(TextView)contentView.findViewById(R.id.strow_businessName);
         final TextView addreddEt = (TextView) contentView.findViewById(R.id.fragment_register_address_editText);
         nameEt.setText(this.user.getfirstName());
         nameLEt.setText(this.user.getlastName());
         addreddEt.setText(this.user.getAddress());
+        businessName.setText(this.user.getBusinessName());
         isBus= (CheckBox)contentView.findViewById(R.id.fragment_register_isBusiness);
         isBus.setChecked(true);
         tablebus= (TableLayout) contentView.findViewById(R.id.fragment_register_table_bus);
@@ -194,9 +197,7 @@ public class BusinessDetailsFragment extends Fragment {
             case R.id.main_edit:
                 mListener.onButtonSelected(user.getUserId());
                 break;
-            case android.R.id.home:
-                Log.d("TAG","home");
-                break;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

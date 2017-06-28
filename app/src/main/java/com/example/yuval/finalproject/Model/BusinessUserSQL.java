@@ -19,9 +19,11 @@ public class BusinessUserSQL {
     static final String USER_ADDRESS = "Address";
     static final String USER_IMAGE_URL = "imageUrl";
     static final String USER_IMAGE_BITMAP = "imageBitMap";
+    static final String USER_BUSINESS_NAME = "businessName";
     static final String USER_IS_BUSINESS = "isBusiness";
     static final String USER_GEL_NAIL = "GelNail";
     static final String USER_LASER_HAIR = "LaserHair";
+
 
     static List<BusinessUser> getAllStudents(SQLiteDatabase db) {
         Cursor cursor = db.query(USER_TABLE, null, null, null, null, null, null);
@@ -34,6 +36,7 @@ public class BusinessUserSQL {
             int imageUrlIndex = cursor.getColumnIndex(USER_IMAGE_URL);
             int imageBitMapIndex = cursor.getColumnIndex(USER_IMAGE_BITMAP);
             int isBusinessIndex=cursor.getColumnIndex(USER_IS_BUSINESS);
+            int businessNameIndex=cursor.getColumnIndex(USER_BUSINESS_NAME);
             int GelNailIndex =cursor.getColumnIndex(USER_GEL_NAIL);
             int LaserHairIndex =cursor.getColumnIndex(USER_LASER_HAIR);
 
@@ -43,6 +46,7 @@ public class BusinessUserSQL {
                 user.setfirstName(cursor.getString(fnameIndex));
                 user.setlastName(cursor.getString(lnameIndex));
                 user.setAddress(cursor.getString(AddressIndex));
+                user.setBusinessName(cursor.getString(businessNameIndex));
                 user.setImages(cursor.getString(imageUrlIndex));
                 user.setImageBitMap(cursor.getBlob(imageBitMapIndex));
                 if(cursor.getInt(isBusinessIndex)==1)
@@ -74,6 +78,7 @@ public class BusinessUserSQL {
         values.put(USER_ADDRESS,user.getAddress());
         values.put(USER_IMAGE_URL, user.getImages());
         values.put(USER_IS_BUSINESS,user.getBusiness());
+        values.put(USER_BUSINESS_NAME,user.getBusinessName());
         values.put(USER_GEL_NAIL,user.getGelNail());
         values.put(USER_LASER_HAIR,user.getLaserHair());
         if(user.getImageBitMap() != null)
@@ -93,7 +98,7 @@ public class BusinessUserSQL {
             int AddressIndex = cursor.getColumnIndex(USER_ADDRESS);
             int imageUrlIndex = cursor.getColumnIndex(USER_IMAGE_URL);
             int imageBitMapIndex = cursor.getColumnIndex(USER_IMAGE_BITMAP);
-
+            int businessNameIndex=cursor.getColumnIndex(USER_BUSINESS_NAME);
             int isBusinessIndex=cursor.getColumnIndex(USER_IS_BUSINESS);
             int GelNailIndex =cursor.getColumnIndex(USER_GEL_NAIL);
             int LaserHairIndex =cursor.getColumnIndex(USER_LASER_HAIR);
@@ -103,6 +108,7 @@ public class BusinessUserSQL {
             user.setfirstName(cursor.getString(fnameIndex));
             user.setlastName(cursor.getString(lnameIndex));
             user.setAddress(cursor.getString(AddressIndex));
+            user.setBusinessName(cursor.getString(businessNameIndex));
             user.setImages(cursor.getString(imageUrlIndex));
             user.setImageBitMap(cursor.getBlob(imageBitMapIndex));
             if(cursor.getInt(isBusinessIndex)==1)
@@ -141,6 +147,7 @@ public class BusinessUserSQL {
         values.put(USER_FNAME, user.getfirstName());
         values.put(USER_LNAME, user.getlastName());
         values.put(USER_ADDRESS,user.getAddress());
+        values.put(USER_BUSINESS_NAME,user.getBusinessName());
         values.put(USER_IMAGE_URL, user.getImages());
         if (user.getBusiness())
             values.put(USER_IS_BUSINESS,1);
@@ -172,6 +179,7 @@ public class BusinessUserSQL {
                 USER_FNAME + " TEXT, " +
                 USER_LNAME + " TEXT, " +
                 USER_ADDRESS + " TEXT, " +
+                USER_BUSINESS_NAME + " TEXT, " +
                 USER_IMAGE_BITMAP + " BLOB, " +
                 USER_IS_BUSINESS +" INTEGER, "+
                 USER_GEL_NAIL +" INTEGER, "+

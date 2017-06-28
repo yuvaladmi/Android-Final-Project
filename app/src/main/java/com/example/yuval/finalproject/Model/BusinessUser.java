@@ -13,6 +13,7 @@ public class BusinessUser extends ClientUser {
     private String images;
     private byte[] imageBitMap;
     private Boolean business;
+    private String businessName;
     private Boolean GelNail;
     private Boolean LaserHair;
 
@@ -30,6 +31,14 @@ public class BusinessUser extends ClientUser {
 
     public void setImageBitMap(byte[] imageBitMap) {
         this.imageBitMap = imageBitMap;
+    }
+
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
     }
 
 

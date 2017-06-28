@@ -20,6 +20,7 @@ public class RegisterFragment extends Fragment {
     EditText lNameET;
     EditText emailET;
     EditText passwordET;
+    EditText businessName;
 
 
     TableLayout tablebus;
@@ -62,6 +63,7 @@ public class RegisterFragment extends Fragment {
         fNameET=(EditText)view.findViewById(R.id.fragment_register_fName_editText);
         lNameET=(EditText)view.findViewById(R.id.fragment_register_lName_editText);
         emailET=(EditText)view.findViewById(R.id.fragment_register_email_editText);
+        businessName = (EditText) view.findViewById(R.id.strow_businessName);
         passwordET=(EditText)view.findViewById(R.id.fragment_register_password_editText);
         add=(EditText)view.findViewById(R.id.fragment_register_address_editText);
         verifyEmailBtn=(Button)view.findViewById(R.id.fragment_register_verifyEmail_btn);
@@ -146,6 +148,7 @@ public class RegisterFragment extends Fragment {
 
         if (flage)
         {
+            user.setBusinessName(businessName.getText().toString());
             user.setAddress(add.getText().toString());
             user.setGelNail(flageNail);
             user.setLaserHair(flageLeser);

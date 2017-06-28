@@ -128,6 +128,7 @@ public class ModelFirebase {
 
         if (user.getBusiness())
         {
+            result.put("businessName",user.getBusinessName());
             result.put("Address",user.getAddress());
             result.put("gelNail",user.getGelNail());
             result.put("laserHair",user.getLaserHair());
@@ -251,12 +252,15 @@ public class ModelFirebase {
         // [END sign_in_with_email]
     }
 
-    public void checkIfUserAuthonticated(Model.LoginListener loginListener) {
+    public Boolean checkIfUserAuthonticated(Model.LoginListener loginListener) {
+        //Log.d("TAG", mAuth.getCurrentUser().getUid());
         if(mAuth.getCurrentUser()!=null)
         {
-            return;
+            loginListener.goToListFragment();
+            return true;
             //loginListener.goToMainActivity();
         }
+        return false;
     }
 
     public void signOut(Model.SignOutListener signOutListener) {
@@ -333,6 +337,7 @@ public class ModelFirebase {
 
         if (user.getBusiness())
         {
+            result.put("businessName",user.getBusinessName());
             result.put("Address",user.getAddress());
             result.put("gelNail",user.getGelNail());
             result.put("laserHair",user.getLaserHair());

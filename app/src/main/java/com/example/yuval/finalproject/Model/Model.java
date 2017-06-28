@@ -176,8 +176,8 @@ public class Model {
 
     }
 
-    public void checkIfUserAuthonticated(LoginListener loginListener) {
-        modelFirebase.checkIfUserAuthonticated(loginListener);
+    public Boolean checkIfUserAuthonticated(LoginListener loginListener) {
+        return modelFirebase.checkIfUserAuthonticated(loginListener);
     }
     public interface SignOutListener{
         void goToMainActivity();

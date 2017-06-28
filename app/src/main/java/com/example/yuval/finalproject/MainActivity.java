@@ -51,7 +51,6 @@ public class MainActivity extends Activity
         ftr.commit();
 
 
-
         loginListener= new Model.LoginListener() {
             @Override
             public void showProgressBar() {
@@ -145,6 +144,7 @@ public class MainActivity extends Activity
             }
         });
 
+
         Model.instance().checkIfUserAuthonticated(loginListener);
 
         mainFragment.setDelegate(new MainFragment.Delegate() {
@@ -206,23 +206,50 @@ public class MainActivity extends Activity
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        return true;
+        menu.clear();
+        menu.add(0, Menu.FIRST, Menu.NONE, "LogOut").setIcon(android.R.drawable.ic_delete);
+        return onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         switch (itemId){
-            case R.id.main_add:
-                break;
-            case android.R.id.home:
+            case Menu.FIRST:
+                Model.instance.signOut(new Model.SignOutListener() {
+                    @Override
+                    public void goToMainActivity() {
+                        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
 
-                break;
+                    @Override
+                    public void showProgressBar() {
+                        progressBar.showProgressDialog();
+                    }
+
+                    @Override
+                    public void hideProgressBar() {
+                        progressBar.hideProgressDialog();
+                    }
+                });
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-        return true;
+    }
+
+
+    @Override
+    public void onBackPressed()
+    {
+        if(Model.instance().checkIfUserAuthonticated(loginListener)) {
+            FragmentTransaction tran = getFragmentManager().beginTransaction();
+            tran.replace(R.id.main_container, businessListFragment);
+            tran.addToBackStack("");
+            tran.commit();
+        }
     }
     @Override
     public void onItemSelected(String itemId) {

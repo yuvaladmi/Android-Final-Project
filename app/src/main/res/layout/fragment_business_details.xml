@@ -127,6 +127,29 @@
                     android:paddingTop="5dp">
 
                     <TableRow
+                        android:id="@+id/fragment_register_businessName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="casual"
+                            android:text="business name: "
+                            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/strow_businessName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="15dp"
+                            android:hint="Address"
+                            android:fontFamily="casual" />
+                    </TableRow>
+
+                    <TableRow
                         android:id="@+id/fragment_register_addr"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
