@@ -37,14 +37,7 @@ import java.io.ByteArrayOutputStream;
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link BusinessEditFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link BusinessEditFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class BusinessEditFragment extends Fragment {
     private static final String ARG_PARAM1 = "studentId";
     BusinessUser user;

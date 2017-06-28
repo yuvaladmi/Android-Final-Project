@@ -25,14 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link BusinessListFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link BusinessListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class BusinessListFragment extends Fragment {
     static final int REQUEST_ADD_ID = 1;
     ListView list;
